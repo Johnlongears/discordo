@@ -31,8 +31,15 @@ func buildMessage(app *App, m *astatine.Message) []byte {
 		}
 
 		// Build the author of this message.
-		buildAuthor(&b, m.Author, app.Session.State.User.ID, m.Member,app)
-
+		if m.Member == nil {
+			if len(m.GuildID) > 0 {
+				member,_ := app.Session.State.Member(m.GuildID, m.Author.ID) // if it ends up as nil anyways we did our best and buildAuthor is faultproof.
+				buildAuthor(&b, m.Author, app.Session.State.User.ID, member,app)
+			}
+		} else {
+			buildAuthor(&b, m.Author, app.Session.State.User.ID, m.Member,app)
+		}
+			
 		// Build the contents of the message.
 		buildContent(&b, m, app.Session.State.User.ID)
 
@@ -209,9 +216,6 @@ func buildMentions(content string, mentions []*astatine.User, clientID string) s
 }
 
 func buildAuthor(b *strings.Builder, u *astatine.User, clientID string, m *astatine.Member, app *App) {
-	if m == nil {
-		b.WriteString("DEBUG: nil member")	
-	}
 	if m != nil && len(m.Nick) > 0 {
 		b.WriteString("! ")
 	}
