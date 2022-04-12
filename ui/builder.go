@@ -233,7 +233,7 @@ func buildAuthor(b *strings.Builder, u *astatine.User, clientID string, m *astat
 		b.WriteString(u.Username)	
 	}
 	b.WriteString("[-] ")
-	if m != nil && m.CommunicationDisabledUntil > 0 {
+	if m != nil && m.CommunicationDisabledUntil > time.Now() {
 		b.WriteString("[#FFFF00]MUTED[-] ")
 	}
 	// If the message author is a bot account, render the message with bot label
