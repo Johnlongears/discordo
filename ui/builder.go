@@ -21,7 +21,7 @@ func buildMessage(app *App, m *astatine.Message) []byte {
 		b.WriteString(m.ID)
 		b.WriteString("\"]")
 		// Build the message associated with crosspost, channel follow add, pin, or a reply.
-		buildReferencedMessage(&b, m.ReferencedMessage, app.Session.State.User.ID)
+		buildReferencedMessage(&b, m.ReferencedMessage, app.Session.State.User.ID, app)
 
 		if app.Config.General.Timestamps {
 			b.WriteString("[::d]")
@@ -81,11 +81,11 @@ func buildMessage(app *App, m *astatine.Message) []byte {
 	return nil
 }
 
-func buildReferencedMessage(b *strings.Builder, rm *astatine.Message, clientID string) {
+func buildReferencedMessage(b *strings.Builder, rm *astatine.Message, clientID string, app *App) {
 	if rm != nil {
 		b.WriteString(" ╭ ")
 		b.WriteString("[::d]")
-		buildAuthor(b, rm.Author, clientID, rm.Member,nil)
+		buildAuthor(b, rm.Author, clientID, rm.Member,app)
 
 		if rm.Content != "" {
 			rm.Content = buildMentions(rm.Content, rm.Mentions, clientID)
@@ -209,6 +209,9 @@ func buildMentions(content string, mentions []*astatine.User, clientID string) s
 }
 
 func buildAuthor(b *strings.Builder, u *astatine.User, clientID string, m *astatine.Member, app *App) {
+	if m == nil {
+		b.WriteString("DEBUG: nil member")	
+	}
 	if m != nil && len(m.Nick) > 0 {
 		b.WriteString("! ")
 	}
