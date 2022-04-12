@@ -180,7 +180,7 @@ func buildEmbeds(b *strings.Builder, es []*astatine.MessageEmbed) {
 func buildAttachments(b *strings.Builder, as []*astatine.MessageAttachment) {
 	for _, a := range as {
 		b.WriteByte('\n')
-		b.WriteByte("[FILE]: ")
+		b.WriteString("[FILE]: ")
 		b.WriteString(a.URL)
 	}
 }
@@ -213,7 +213,7 @@ func buildAuthor(b *strings.Builder, u *astatine.User, clientID string, m *astat
 	}
 	var gotRoleColor bool = false
 	if app != nil && m != nil && len(m.Roles) >= 1  {
-		r, err := app.Session.State.Role(m.GuildID)
+		//r, err := app.Session.State.Role(m.GuildID)
 		if r != nil {
 			//TODO
 		}
