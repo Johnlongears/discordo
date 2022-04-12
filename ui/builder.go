@@ -31,7 +31,7 @@ func buildMessage(app *App, m *astatine.Message) []byte {
 		}
 
 		// Build the author of this message.
-		buildAuthor(&b, m.Author, app.Session.State.User.ID)
+		buildAuthor(&b, m.Author, app.Session.State.User.ID, m.Member)
 
 		// Build the contents of the message.
 		buildContent(&b, m, app.Session.State.User.ID)
@@ -85,7 +85,7 @@ func buildReferencedMessage(b *strings.Builder, rm *astatine.Message, clientID s
 	if rm != nil {
 		b.WriteString(" ╭ ")
 		b.WriteString("[::d]")
-		buildAuthor(b, rm.Author, clientID)
+		buildAuthor(b, rm.Author, clientID, rm.Member)
 
 		if rm.Content != "" {
 			rm.Content = buildMentions(rm.Content, rm.Mentions, clientID)
@@ -180,9 +180,7 @@ func buildEmbeds(b *strings.Builder, es []*astatine.MessageEmbed) {
 func buildAttachments(b *strings.Builder, as []*astatine.MessageAttachment) {
 	for _, a := range as {
 		b.WriteByte('\n')
-		b.WriteByte('[')
-		b.WriteString(a.Filename)
-		b.WriteString("]: ")
+		b.WriteByte('[FILE]: ')
 		b.WriteString(a.URL)
 	}
 }
@@ -191,7 +189,7 @@ func buildMentions(content string, mentions []*astatine.User, clientID string) s
 	for _, mUser := range mentions {
 		var color string
 		if mUser.ID == clientID {
-			color = "[:#5865F2]"
+			color = "[:#FFA500]"
 		} else {
 			color = "[#EB459E]"
 		}
@@ -209,15 +207,34 @@ func buildMentions(content string, mentions []*astatine.User, clientID string) s
 	return content
 }
 
-func buildAuthor(b *strings.Builder, u *astatine.User, clientID string) {
-	if u.ID == clientID {
-		b.WriteString("[#57F287]")
-	} else {
-		b.WriteString("[#ED4245]")
+func buildAuthor(b *strings.Builder, u *astatine.User, clientID string, m *astatine.Member, app *App) {
+	if m != nil && m.Nick != nil {
+		b.writeString("! ")
 	}
-
-	b.WriteString(u.Username)
+	var gotRoleColor bool = false
+	if m != nil && len(m.Roles) >= 1 {
+		r, err := app.Session.State.Role(m.GuildID)
+		if r != nil {
+			//TODO
+		}
+	}
+	if gotRoleColor == false {
+		if u.ID == clientID {
+			b.WriteString("[#57F287]")
+		} else {
+			b.WriteString("[#ED4245]")
+		}
+	}
+		
+	if m != nil && m.Nick != nil {
+		b.writeString(m.Nick)	
+	} else {
+		b.WriteString(u.Username)	
+	}
 	b.WriteString("[-] ")
+	if m != nil && m.CommunicationDisabledUntil != nil {
+		b.writeString("[#FFFF00]MUTED[-] ")
+	}
 	// If the message author is a bot account, render the message with bot label
 	// for distinction.
 	if u.Bot {
