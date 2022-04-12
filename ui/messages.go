@@ -1,7 +1,6 @@
 package ui
 
 import (
-	"io"
 	"io/ioutil"
 	"net/http"
 	"os"
@@ -332,7 +331,7 @@ func (mi *MessageInputField) onInputCapture(e *tcell.EventKey) *tcell.EventKey {
 			return nil
 		}
 
-		f, err := File.CreateTemp(os.TempDir(), "discordo-*.md")
+		f, err := os.CreateTemp(os.TempDir(), "discordo-*.md")
 		if err != nil {
 			return nil
 		}
