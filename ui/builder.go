@@ -180,7 +180,7 @@ func buildEmbeds(b *strings.Builder, es []*astatine.MessageEmbed) {
 func buildAttachments(b *strings.Builder, as []*astatine.MessageAttachment) {
 	for _, a := range as {
 		b.WriteByte('\n')
-		b.WriteByte("[")
+		b.WriteByte('[')
 		b.WriteString("FILE]: ")
 		b.WriteString(a.URL)
 	}
