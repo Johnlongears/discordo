@@ -208,7 +208,7 @@ func buildMentions(content string, mentions []*astatine.User, clientID string) s
 }
 
 func buildAuthor(b *strings.Builder, u *astatine.User, clientID string, m *astatine.Member, app *App) {
-	if m != nil && len(m.Nick > 0) {
+	if m != nil && len(m.Nick) > 0 {
 		b.WriteString("! ")
 	}
 	var gotRoleColor bool = false
@@ -226,7 +226,7 @@ func buildAuthor(b *strings.Builder, u *astatine.User, clientID string, m *astat
 		}
 	}
 		
-	if m != nil && len(m.Nick > 0) {
+	if m != nil && len(m.Nick) > 0 {
 		b.WriteString(m.Nick)	
 	} else {
 		b.WriteString(u.Username)	
