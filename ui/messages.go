@@ -332,7 +332,7 @@ func (mi *MessageInputField) onInputCapture(e *tcell.EventKey) *tcell.EventKey {
 			return nil
 		}
 
-		f, err := os.CreateTemp(os.TempDir(), "discordo-*.md")
+		f, err := File.CreateTemp(os.TempDir(), "discordo-*.md")
 		if err != nil {
 			return nil
 		}
@@ -349,7 +349,7 @@ func (mi *MessageInputField) onInputCapture(e *tcell.EventKey) *tcell.EventKey {
 			}
 		})
 
-		b, err := io.ReadAll(f)
+		b, err := ioutil.ReadAll(f)
 		if err != nil {
 			return nil
 		}
