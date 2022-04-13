@@ -31,7 +31,8 @@ func buildMessage(app *App, m *astatine.Message) []byte {
 		}
 
 		// Build the author of this message.
-		if m.Member == nil {
+		//if m.Member == nil {
+		if true {
 			b.WriteString("nomem")
 			if len(m.GuildID) > 0 {
 				b.WriteString("gid")
