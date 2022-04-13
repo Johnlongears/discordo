@@ -32,19 +32,25 @@ func buildMessage(app *App, m *astatine.Message) []byte {
 
 		// Build the author of this message.
 		if m.Member == nil {
+			b.WriteString("nomem")
 			if len(m.GuildID) > 0 {
+				b.WriteString("gid")
 				member,_ := app.Session.State.Member(m.GuildID, m.Author.ID) // if it ends up as nil anyways we did our best and buildAuthor is faultproof.
 				buildAuthor(&b, m.Author, app.Session.State.User.ID, member,app)
 			} else{
+				b.WriteString("nogid")
 				c, _ := app.Session.State.Channel(m.ChannelID)
 				if c != nil &&  len(c.GuildID) > 0 {
+					b.WriteString("cgid")
 					member,_ := app.Session.State.Member(c.GuildID, m.Author.ID) 
 					buildAuthor(&b, m.Author, app.Session.State.User.ID, member,app)
 				} else {
+					b.WriteString("nocgid")
 					buildAuthor(&b, m.Author, app.Session.State.User.ID, nil,app)	//dm channel, probably.
 				}
 			}
 		} else {
+			b.WriteString("mem")
 			buildAuthor(&b, m.Author, app.Session.State.User.ID, m.Member,app)
 		}
 			
