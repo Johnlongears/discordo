@@ -4,7 +4,7 @@ import (
 	"strings"
 
 	"github.com/ayntgl/astatine"
-	"github.com/ayntgl/discordo/ui"
+	"github.com/ayntgl/discordo"
 )
 
 func ChannelToString(c *astatine.Channel) string {
