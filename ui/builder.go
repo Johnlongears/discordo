@@ -32,13 +32,17 @@ func buildMessage(app *App, m *astatine.Message) []byte {
 
 		// Build the author of this message.
 		if m.Member == nil {
+			b.WriteString("nomem")
 			if len(m.GuildID) > 0 {
+				b.WriteString("gid")
 				member,_ := app.Session.State.Member(m.GuildID, m.Author.ID) // if it ends up as nil anyways we did our best and buildAuthor is faultproof.
 				buildAuthor(&b, m.Author, app.Session.State.User.ID, member,app)
 			} else{
+				b.WriteString("nogid")
 				buildAuthor(&b, m.Author, app.Session.State.User.ID, nil,app)	
 			}
 		} else {
+			b.WriteString("mem")
 			buildAuthor(&b, m.Author, app.Session.State.User.ID, m.Member,app)
 		}
 			
@@ -189,8 +193,7 @@ func buildEmbeds(b *strings.Builder, es []*astatine.MessageEmbed) {
 func buildAttachments(b *strings.Builder, as []*astatine.MessageAttachment) {
 	for _, a := range as {
 		b.WriteByte('\n')
-		b.WriteByte('[')
-		b.WriteString("FILE]: ")
+		b.WriteString("FILE: ")
 		b.WriteString(a.URL)
 	}
 }
