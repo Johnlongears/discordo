@@ -33,40 +33,12 @@ func buildMessage(app *App, m *astatine.Message) []byte {
 		// Build the author of this message.
 		if m.Member == nil {
 			if len(m.GuildID) > 0 {
-				b.WriteString("gid")
-				var member *astatine.Member
-				member,_ = app.Session.State.Member(m.GuildID, m.Author.ID) 
-				if(member == nil){
-					b.WriteString("uncache")
-					member,_ = app.Session.GuildMember(m.GuildID, m.Author.ID)	
-					if member != nil {
-						b.WriteString("found")
-						app.Session.State.MemberAdd(member)
-					}
-				}
+				member := discord.GetMember(app,m.GuildID,m.Author.ID)
 				buildAuthor(&b, m.Author, app.Session.State.User.ID, member,app)
 			} else{
-				var c *astatine.Channel
-				c, _ = app.Session.State.Channel(m.ChannelID)
-				if c == nil {
-					b.WriteString("uncachc")
-					c, _ = app.Session.Channel(m.ChannelID)
-					if c != nil {
-						b.WriteString("found")
-						app.Session.State.ChannelAdd(c)
-					}
-				}
+				c := discord.GetChannel(app,m.ChannelID)
 				if c != nil &&  len(c.GuildID) > 0 {
-					var member *astatine.Member
-					member,_ = app.Session.State.Member(c.GuildID, m.Author.ID) 
-					if(member == nil){
-						b.WriteString("uncache")
-						member,_ = app.Session.GuildMember(m.GuildID, m.Author.ID)	
-						if member != nil {
-							b.WriteString("found")
-							app.Session.State.MemberAdd(member)
-						}
-					}
+					member := discord.GetMember(app,m.GuildId,m.Author.ID)
 					buildAuthor(&b, m.Author, app.Session.State.User.ID, member,app)
 				} else {
 					buildAuthor(&b, m.Author, app.Session.State.User.ID, nil,app)	//dm channel, probably.
