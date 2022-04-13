@@ -30,6 +30,7 @@ func NewApp(token string, c *config.Config) *App {
 		Config:          c,
 		SelectedMessage: -1,
 	}
+	app.Session.State.MaxMessageLimit = 5000;
 
 	app.GuildsList = NewGuildsList(app)
 	app.ChannelsTreeView = NewChannelsTreeView(app)
