@@ -33,12 +33,12 @@ func buildMessage(app *App, m *astatine.Message) []byte {
 		// Build the author of this message.
 		if m.Member == nil {
 			if len(m.GuildID) > 0 {
-				member := discord.GetMember(app,m.GuildID,m.Author.ID)
+				member := discord.GetMember(app.Session,m.GuildID,m.Author.ID)
 				buildAuthor(&b, m.Author, app.Session.State.User.ID, member,app)
 			} else{
-				c := discord.GetChannel(app,m.ChannelID)
+				c := discord.GetChannel(app.Session,m.ChannelID)
 				if c != nil &&  len(c.GuildID) > 0 {
-					member := discord.GetMember(app,m.GuildId,m.Author.ID)
+					member := discord.GetMember(app.Session,m.GuildID,m.Author.ID)
 					buildAuthor(&b, m.Author, app.Session.State.User.ID, member,app)
 				} else {
 					buildAuthor(&b, m.Author, app.Session.State.User.ID, nil,app)	//dm channel, probably.
