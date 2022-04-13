@@ -44,43 +44,43 @@ func HasPermission(s *astatine.State, cID string, p int64) bool {
 	return perm&p == p
 }
 
-func GetMember(app *ui.App, gID string, uID string) *astatine.Member {
+func GetMember(session *astatine.Session, gID string, uID string) *astatine.Member {
 	var member *astatine.Member
-	member,_ = app.Session.State.Member(gID,uID)
+	member,_ = session.State.Member(gID,uID)
 	if(member == nil){
-		member,_ = app.Session.Member(gID,uID)
+		member,_ = session.Member(gID,uID)
 		if(member == nil){
 			return nil
 		}
-		app.Session.State.MemberAdd(member)
+		session.State.MemberAdd(member)
 		return member
 	}
 	return member
 }
 
-func GetChannel(app *ui.App, cID string) *astatine.Channel {
+func GetChannel(session *astatine.Session, cID string) *astatine.Channel {
 	var channel *astatine.Channel
-	channel,_ = app.Session.State.Channel(cID)
+	channel,_ = session.State.Channel(cID)
 	if(channel == nil){
-		channel,_ = app.Session.Channel(cID)
+		channel,_ = session.Channel(cID)
 		if(channel == nil){
 			return nil
 		}
-		app.Session.State.ChannelAdd(channel)
+		session.State.ChannelAdd(channel)
 		return channel
 	}
 	return channel
 }
 
-func GetGuild(app *ui.App, gID string) *astatine.Guild {
+func GetGuild(session *astatine.Session, gID string) *astatine.Guild {
 	var guild *astatine.Guild
-	guild,_ = app.Session.State.Guild(gID)
+	guild,_ = session.State.Guild(gID)
 	if(guild == nil){
-		guild,_ = app.Session.Guild(gID)
+		guild,_ = session.Guild(gID)
 		if(guild == nil){
 			return nil
 		}
-		app.Session.State.GuildAdd(guild)
+		session.State.GuildAdd(guild)
 		return guild
 	}
 	return guild
