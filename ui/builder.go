@@ -35,9 +35,10 @@ func buildMessage(app *App, m *astatine.Message) []byte {
 			b.WriteString("nomem")
 			if len(m.GuildID) > 0 {
 				b.WriteString("gid")
-				member,_ := app.Session.State.Member(m.GuildID, m.Author.ID) 
+				var member Member
+				member,_ = app.Session.State.Member(m.GuildID, m.Author.ID) 
 				if(member == nil){
-					member,_ := app.Session.GuildMember(m.GuildID, m.Author.ID)	
+					member,_ = app.Session.GuildMember(m.GuildID, m.Author.ID)	
 					if member != nil {
 						app.Session.State.MemberAdd(member)
 					}
@@ -45,18 +46,20 @@ func buildMessage(app *App, m *astatine.Message) []byte {
 				buildAuthor(&b, m.Author, app.Session.State.User.ID, member,app)
 			} else{
 				b.WriteString("nogid")
-				c, _ := app.Session.State.Channel(m.ChannelID)
+				var c Channel
+				c, _ = app.Session.State.Channel(m.ChannelID)
 				if c == nil {
-					c, _ := app.Session.Channel(m.ChannelID)
+					c, _ = app.Session.Channel(m.ChannelID)
 					if c != nil {
 						app.Session.State.ChannelAdd(c)
 					}
 				}
 				if c != nil &&  len(c.GuildID) > 0 {
 					b.WriteString("cgid")
-					member,_ := app.Session.State.Member(c.GuildID, m.Author.ID) 
+					var member Member
+					member,_ = app.Session.State.Member(c.GuildID, m.Author.ID) 
 					if(member == nil){
-						member,_ := app.Session.GuildMember(m.GuildID, m.Author.ID)	
+						member,_ = app.Session.GuildMember(m.GuildID, m.Author.ID)	
 						if member != nil {
 							app.Session.State.MemberAdd(member)
 						}
