@@ -237,10 +237,8 @@ func buildAuthor(b *strings.Builder, u *astatine.User, clientID string, m *astat
 	}
 		
 	if m != nil && len(m.Nick) > 0 {
-		b.WriteString("dbg")
 		b.WriteString(m.Nick)	
 	} else {
-		b.writeString("usr")
 		b.WriteString(u.Username)	
 	}
 	b.WriteString("[-] ")
