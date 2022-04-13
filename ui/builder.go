@@ -35,6 +35,8 @@ func buildMessage(app *App, m *astatine.Message) []byte {
 			if len(m.GuildID) > 0 {
 				member,_ := app.Session.State.Member(m.GuildID, m.Author.ID) // if it ends up as nil anyways we did our best and buildAuthor is faultproof.
 				buildAuthor(&b, m.Author, app.Session.State.User.ID, member,app)
+			} else{
+				buildAuthor(&b, m.Author, app.Session.State.User.ID, nil,app)	
 			}
 		} else {
 			buildAuthor(&b, m.Author, app.Session.State.User.ID, m.Member,app)
