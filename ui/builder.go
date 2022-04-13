@@ -43,7 +43,7 @@ func buildMessage(app *App, m *astatine.Message) []byte {
 				if c != nil &&  len(c.GuildID) > 0 {
 					b.WriteString("cgid")
 					member,err := app.Session.State.Member(c.GuildID, m.Author.ID) 
-					b.WriteString(err)
+					if(member == nil) b.WriteString("fail")
 					buildAuthor(&b, m.Author, app.Session.State.User.ID, member,app)
 				} else {
 					b.WriteString("nocgid")
