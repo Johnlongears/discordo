@@ -42,7 +42,7 @@ func buildMessage(app *App, m *astatine.Message) []byte {
 				c, _ := app.Session.State.Channel(m.ChannelID)
 				if c != nil &&  len(c.GuildID) > 0 {
 					b.WriteString("cgid")
-					member,err := app.Session.State.Member(c.GuildID, m.Author.ID) 
+					member,_ := app.Session.State.Member(c.GuildID, m.Author.ID) 
 					if member == nil {
 						b.WriteString("fail")
 					}
