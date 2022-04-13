@@ -48,7 +48,7 @@ func GetMember(session *astatine.Session, gID string, uID string) *astatine.Memb
 	var member *astatine.Member
 	member,_ = session.State.Member(gID,uID)
 	if(member == nil){
-		member,_ = session.Member(gID,uID)
+		member,_ = session.GuildMember(gID,uID)
 		if(member == nil){
 			return nil
 		}
