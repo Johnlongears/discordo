@@ -4,7 +4,6 @@ import (
 	"strings"
 
 	"github.com/ayntgl/astatine"
-	"github.com/ayntgl/discordo"
 )
 
 func ChannelToString(c *astatine.Channel) string {
@@ -45,7 +44,7 @@ func HasPermission(s *astatine.State, cID string, p int64) bool {
 	return perm&p == p
 }
 
-func GetMember(app *App, gID string, uID string) *astatine.Member {
+func GetMember(app *ui.App, gID string, uID string) *astatine.Member {
 	var member *astatine.Member
 	member,_ = app.Session.State.Member(gID,uID)
 	if(member == nil){
@@ -59,7 +58,7 @@ func GetMember(app *App, gID string, uID string) *astatine.Member {
 	return member
 }
 
-func GetChannel(app *App, cID string) *astatine.Channel {
+func GetChannel(app *ui.App, cID string) *astatine.Channel {
 	var channel *astatine.Channel
 	channel,_ = app.Session.State.Channel(cID)
 	if(channel == nil){
@@ -73,7 +72,7 @@ func GetChannel(app *App, cID string) *astatine.Channel {
 	return channel
 }
 
-func GetGuild(app *App, gID string) *astatine.Guild {
+func GetGuild(app *ui.App, gID string) *astatine.Guild {
 	var guild *astatine.Guild
 	guild,_ = app.Session.State.Guild(gID)
 	if(guild == nil){
