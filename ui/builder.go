@@ -229,6 +229,11 @@ func buildMentions(content string, mentions []*astatine.User, clientID string) s
 }
 
 func buildAuthor(b *strings.Builder, u *astatine.User, clientID string, m *astatine.Member, app *App) {
+	if m == nil {
+		b.WriteString("autnomem")
+	} else {
+		b.WriteString("autmem")
+	}
 	if m != nil && len(m.Nick) > 0 {
 		b.WriteString("! ")
 	}
