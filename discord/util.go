@@ -1,6 +1,7 @@
 package discord
 
 import (
+	"fmt"
 	"strings"
 
 	"github.com/ayntgl/astatine"
@@ -46,9 +47,11 @@ func HasPermission(s *astatine.State, cID string, p int64) bool {
 
 func GetMember(session *astatine.Session, gID string, uID string) *astatine.Member {
 	var member *astatine.Member
-	member,_ = session.State.Member(gID,uID)
+	member,err = session.State.Member(gID,uID)
+	fmt.Printf(err)
 	if(member == nil){
-		member,_ = session.GuildMember(gID,uID)
+		member,err = session.GuildMember(gID,uID)
+		fmt.Printf(err)
 		if(member == nil){
 			return nil
 		}
@@ -60,9 +63,11 @@ func GetMember(session *astatine.Session, gID string, uID string) *astatine.Memb
 
 func GetChannel(session *astatine.Session, cID string) *astatine.Channel {
 	var channel *astatine.Channel
-	channel,_ = session.State.Channel(cID)
+	channel,err = session.State.Channel(cID)
+	fmt.Printf(err)
 	if(channel == nil){
-		channel,_ = session.Channel(cID)
+		channel,err = session.Channel(cID)
+		fmt.Printf(err)
 		if(channel == nil){
 			return nil
 		}
@@ -74,9 +79,11 @@ func GetChannel(session *astatine.Session, cID string) *astatine.Channel {
 
 func GetGuild(session *astatine.Session, gID string) *astatine.Guild {
 	var guild *astatine.Guild
-	guild,_ = session.State.Guild(gID)
+	guild,err = session.State.Guild(gID)
+	fmt.Printf(err)
 	if(guild == nil){
-		guild,_ = session.Guild(gID)
+		guild,err = session.Guild(gID)
+		fmt.Printf(err)
 		if(guild == nil){
 			return nil
 		}
