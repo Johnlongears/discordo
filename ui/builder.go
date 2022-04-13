@@ -49,7 +49,7 @@ func buildMessage(app *App, m *astatine.Message) []byte {
 				if c == nil {
 					c, _ := app.Session.Channel(m.ChannelID)
 					if c != nil {
-						app.session.State.ChannelAdd(c)
+						app.Session.State.ChannelAdd(c)
 					}
 				}
 				if c != nil &&  len(c.GuildID) > 0 {
