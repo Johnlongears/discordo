@@ -43,3 +43,45 @@ func HasPermission(s *astatine.State, cID string, p int64) bool {
 
 	return perm&p == p
 }
+
+func GetMember(app *App, gID string, uID string) *astatine.Member {
+	var member *astatine.Member
+	member,_ = app.Session.State.Member(gID,uID)
+	if(member == nil){
+		member,_ = app.Session.Member(gID,uID)
+		if(member == nil){
+			return nil
+		}
+		app.Session.State.MemberAdd(member)
+		return member
+	}
+	return member
+}
+
+func GetChannel(app *App, cID string) *astatine.Channel {
+	var channel *astatine.Channel
+	channel,_ = app.Session.State.Channel(cID)
+	if(channel == nil){
+		channel,_ = app.Session.Channel(cID)
+		if(channel == nil){
+			return nil
+		}
+		app.Session.State.ChannelAdd(channel)
+		return channel
+	}
+	return channel
+}
+
+func GetGuild(app *App, gID string) *astatine.Guild {
+	var guild *astatine.Guild
+	guild,_ = app.Session.State.Guild(gID)
+	if(guild == nil){
+		guild,_ = app.Session.Guild(gID)
+		if(guild == nil){
+			return nil
+		}
+		app.Session.State.GuildAdd(guild)
+		return guild
+	}
+	return guild
+}
