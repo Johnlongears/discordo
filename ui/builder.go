@@ -49,7 +49,7 @@ func buildEdit(app *App, e *astatine.MessageUpdate) []byte {
 	}
 			
 		// Build the contents of the message.
-	buildContent(&b, M.Message, app.Session.State.User.ID)
+	buildContent(&b, m.Message, app.Session.State.User.ID)
 
 		// Build the embeds associated with the message.
 		buildEmbeds(&b, m.Embeds)
