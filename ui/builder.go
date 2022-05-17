@@ -9,17 +9,17 @@ import (
 	"github.com/ayntgl/discordo/discord"
 )
 
-func buildEdit(app *App, e *astatine.MessageEdit) []byte {
+func buildEdit(app *App, e *astatine.MessageUpdate) []byte {
 	var b strings.Builder
 	// Define a new region and assign message ID as the region ID.
 		// Learn more:
 		// https://pkg.go.dev/github.com/rivo/tview#hdr-Regions_and_Highlights
-	m, _ := app.Session.ChannelMessage(e.Channel,e.ID)
+	m := e
 		b.WriteString("[\"")
 		b.WriteString(m.ID)
 		b.WriteString("\"]")
 		// Build the message associated with crosspost, channel follow add, pin, or a reply.
-		buildReferencedMessage(&b, m, app.Session.State.User.ID, app)
+		buildReferencedMessage(&b, e.BeforeUpdate, app.Session.State.User.ID, app)
 
 		if app.Config.General.Timestamps {
 			b.WriteString("[::d]")
@@ -27,13 +27,29 @@ func buildEdit(app *App, e *astatine.MessageEdit) []byte {
 			b.WriteString("[::-]")
 			b.WriteByte(' ')
 		}
+	b.writeString("[EDIT]")
+	if(e.BeforeUpdate == nil){
+		// Build the author of this message.
+		if m.Member == nil {
+			if len(m.GuildID) > 0 {
+				member := discord.GetMember(app.Session,m.GuildID,m.Author.ID)
+				buildAuthor(&b, m.Author, app.Session.State.User.ID, member,app)
+			} else{
+				c := discord.GetChannel(app.Session,m.ChannelID)
+				if c != nil &&  len(c.GuildID) > 0 {
+					member := discord.GetMember(app.Session,m.GuildID,m.Author.ID)
+					buildAuthor(&b, m.Author, app.Session.State.User.ID, member,app)
+				} else {
+					buildAuthor(&b, m.Author, app.Session.State.User.ID, nil,app)	//dm channel, probably.
+				}
+			}
+		} else {
+			buildAuthor(&b, m.Author, app.Session.State.User.ID, m.Member,app)
+		}
+	}
 			
 		// Build the contents of the message.
 		buildContent(&b, m, app.Session.State.User.ID)
-
-		if m.EditedTimestamp != nil {
-			b.WriteString(" [::d](edited)[::-]")
-		}
 
 		// Build the embeds associated with the message.
 		buildEmbeds(&b, m.Embeds)
