@@ -58,7 +58,7 @@ func buildEdit(app *App, e *astatine.MessageEdit) []byte {
 
 func buildDelete(app *App, d *astatine.MessageDelete) []byte {
 	var b strings.Builder
-	if(d.BeforeDelete != null){
+	if(d.BeforeDelete != nil){
 		m := d.BeforeDelete
 		b.WriteString("[\"")
 		b.WriteString(m.ID)
