@@ -49,6 +49,27 @@ func buildEdit(app *App, e *astatine.MessageEdit) []byte {
 	
 }
 
+func buildDelete(app *App, d *astatine.MessageDelete) []byte {
+	var b strings.Builder
+	if(d.BeforeDeleted != null){
+		m := d.BeforeDeleted
+		b.WriteString("[\"")
+		b.WriteString(m.ID)
+		b.WriteString("\"]")
+		buildReferencedMessage(&b, m, app.Session.State.User.ID, app)
+		if app.Config.General.Timestamps {
+			b.WriteString("[::d]")
+			b.WriteString(m.Timestamp.Format(time.Stamp))
+			b.WriteString("[::-]")
+			b.WriteByte(' ')
+		}
+		b.WriteString("Message was Deleted")
+		b.WriteString("[\"\"]")
+
+		b.WriteByte('\n')
+	}
+}
+
 func buildMessage(app *App, m *astatine.Message) []byte {
 	var b strings.Builder
 
