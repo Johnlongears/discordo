@@ -62,6 +62,8 @@ func (app *App) Connect() error {
 	app.Session.AddHandler(app.onSessionGuildCreate)
 	app.Session.AddHandler(app.onSessionGuildDelete)
 	app.Session.AddHandler(app.onSessionMessageCreate)
+	app.Session.AddHandler(app.onSessionMessageEdit)
+	app.Session.AddHandler(app.onSessionMessageDelete)
 	return app.Session.Open()
 }
 
@@ -144,6 +146,32 @@ func (app *App) onSessionMessageCreate(_ *astatine.Session, m *astatine.MessageC
 	if app.SelectedChannel != nil && app.SelectedChannel.ID == m.ChannelID {
 		app.SelectedChannel.Messages = append(app.SelectedChannel.Messages, m.Message)
 		_, err := app.MessagesTextView.Write(buildMessage(app, m.Message))
+		if err != nil {
+			return
+		}
+
+		if len(app.MessagesTextView.GetHighlights()) == 0 {
+			app.MessagesTextView.ScrollToEnd()
+		}
+	}
+}
+
+func (app *App) onSessionMessageDelete(_ *astatine.Session, m *astatine.MessageDelete){
+	if app.SelectedChannel != nil && app.SelectedChannel.ID == m.ChannelID {
+		_, err := app.MessagesTextView.Write(buildDelete(app, m))
+		if err != nil {
+			return
+		}
+
+		if len(app.MessagesTextView.GetHighlights()) == 0 {
+			app.MessagesTextView.ScrollToEnd()
+		}
+	}
+}
+
+func (app *App) onSessionMessageEdit(_ *astatine.Session, m *astatine.MessageEdit){
+	if app.SelectedChannel != nil && app.SelectedChannel.ID == m.ChannelID {
+		_, err := app.MessagesTextView.Write(buildEdit(app, m))
 		if err != nil {
 			return
 		}
