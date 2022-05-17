@@ -169,8 +169,8 @@ func (app *App) onSessionMessageDelete(_ *astatine.Session, m *astatine.MessageD
 	}
 }
 
-func (app *App) onSessionMessageEdit(_ *astatine.Session, m *astatine.MessageEdit){
-	if app.SelectedChannel != nil && app.SelectedChannel.ID == m.Channel {
+func (app *App) onSessionMessageEdit(_ *astatine.Session, m *astatine.MessageUpdate){
+	if app.SelectedChannel != nil && app.SelectedChannel.ID == m.ChannelID {
 		_, err := app.MessagesTextView.Write(buildEdit(app, m))
 		if err != nil {
 			return
