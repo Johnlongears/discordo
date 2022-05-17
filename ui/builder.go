@@ -9,6 +9,46 @@ import (
 	"github.com/ayntgl/discordo/discord"
 )
 
+func buildEdit(app *App, e *astatine.MessageEdit) []byte {
+	var b Strings.builder
+	// Define a new region and assign message ID as the region ID.
+		// Learn more:
+		// https://pkg.go.dev/github.com/rivo/tview#hdr-Regions_and_Highlights
+		b.WriteString("[\"")
+		b.WriteString(m.ID)
+		b.WriteString("\"]")
+	m := app.Session.ChannelMessage(e.Channel,e.ID)
+		// Build the message associated with crosspost, channel follow add, pin, or a reply.
+		buildReferencedMessage(&b, m, app.Session.State.User.ID, app)
+
+		if app.Config.General.Timestamps {
+			b.WriteString("[::d]")
+			b.WriteString(m.Timestamp.Format(time.Stamp))
+			b.WriteString("[::-]")
+			b.WriteByte(' ')
+		}
+			
+		// Build the contents of the message.
+		buildContent(&b, m, app.Session.State.User.ID)
+
+		if m.EditedTimestamp != nil {
+			b.WriteString(" [::d](edited)[::-]")
+		}
+
+		// Build the embeds associated with the message.
+		buildEmbeds(&b, m.Embeds)
+
+		// Build the message attachments (attached files to the message).
+		buildAttachments(&b, m.Attachments)
+
+		// Tags with no region ID ([""]) do not start new regions. They can
+		// therefore be used to mark the end of a region.
+		b.WriteString("[\"\"]")
+
+		b.WriteByte('\n')
+	
+}
+
 func buildMessage(app *App, m *astatine.Message) []byte {
 	var b strings.Builder
 
@@ -109,7 +149,10 @@ func buildReferencedMessage(b *strings.Builder, rm *astatine.Message, clientID s
 
 		b.WriteString("[::-]")
 		b.WriteByte('\n')
-	}
+	} /*else {
+		b.WriteString(" ╭ [::d]Original message deleted[::-]")
+		b.writeByte('\n')
+	}*/
 }
 
 func buildContent(b *strings.Builder, m *astatine.Message, clientID string) {
@@ -223,11 +266,6 @@ func buildMentions(content string, mentions []*astatine.User, clientID string) s
 }
 
 func buildAuthor(b *strings.Builder, u *astatine.User, clientID string, m *astatine.Member, app *App) {
-	if m == nil {
-		b.WriteString("autnomem")
-	} else {
-		b.WriteString("autmem")
-	}
 	if m != nil && len(m.Nick) > 0 {
 		b.WriteString("! ")
 	}
