@@ -10,14 +10,14 @@ import (
 )
 
 func buildEdit(app *App, e *astatine.MessageEdit) []byte {
-	var b Strings.builder
+	var b strings.Builder
 	// Define a new region and assign message ID as the region ID.
 		// Learn more:
 		// https://pkg.go.dev/github.com/rivo/tview#hdr-Regions_and_Highlights
+	m, _ := app.Session.ChannelMessage(e.Channel,e.ID)
 		b.WriteString("[\"")
 		b.WriteString(m.ID)
 		b.WriteString("\"]")
-	m := app.Session.ChannelMessage(e.Channel,e.ID)
 		// Build the message associated with crosspost, channel follow add, pin, or a reply.
 		buildReferencedMessage(&b, m, app.Session.State.User.ID, app)
 
@@ -46,13 +46,20 @@ func buildEdit(app *App, e *astatine.MessageEdit) []byte {
 		b.WriteString("[\"\"]")
 
 		b.WriteByte('\n')
-	
+	if str := b.String(); str != "" {
+		b := make([]byte, len(str)+1)
+		copy(b, str)
+
+		return b
+	}
+
+	return nil
 }
 
 func buildDelete(app *App, d *astatine.MessageDelete) []byte {
 	var b strings.Builder
-	if(d.BeforeDeleted != null){
-		m := d.BeforeDeleted
+	if(d.BeforeDelete != null){
+		m := d.BeforeDelete
 		b.WriteString("[\"")
 		b.WriteString(m.ID)
 		b.WriteString("\"]")
@@ -68,6 +75,14 @@ func buildDelete(app *App, d *astatine.MessageDelete) []byte {
 
 		b.WriteByte('\n')
 	}
+	if str := b.String(); str != "" {
+		b := make([]byte, len(str)+1)
+		copy(b, str)
+
+		return b
+	}
+
+	return nil
 }
 
 func buildMessage(app *App, m *astatine.Message) []byte {
