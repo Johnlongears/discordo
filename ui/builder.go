@@ -113,7 +113,9 @@ func buildMessage(app *App, m *astatine.Message) []byte {
 		b.WriteString(m.ID)
 		b.WriteString("\"]")
 		// Build the message associated with crosspost, channel follow add, pin, or a reply.
-		buildReferencedMessage(&b, m.ReferencedMessage, app.Session.State.User.ID, app)
+		if(m.Type == astatine.MessageTypeReply){
+			buildReferencedMessage(&b, m.ReferencedMessage, app.Session.State.User.ID, app)			
+		}
 
 		if app.Config.General.Timestamps {
 			b.WriteString("[::d]")
@@ -192,8 +194,23 @@ func buildReferencedMessage(b *strings.Builder, rm *astatine.Message, clientID s
 	if rm != nil {
 		b.WriteString(" ╭ ")
 		b.WriteString("[::d]")
-		buildAuthor(b, rm.Author, clientID, rm.Member,app)
-
+		if rm.Member == nil {
+			if len(m.GuildID) > 0 {
+				member := discord.GetMember(app.Session,rm.GuildID,rm.Author.ID)
+				buildAuthor(b, rm.Author, clientID, member,app)
+			} else{
+				c := app.SelectedChannel
+				if c != nil && len(c.GuildID) > 0 {
+					member := discord.GetMember(app.Session,c.GuildID,m.Author.ID)
+					buildAuthor(b, rm.Author, clientID, member,app)
+				} else {
+					buildAuthor(b, rm.Author, clientID, nil,app)	//dm channel, probably.
+				}
+			}
+		} else {
+			buildAuthor(b, rm.Author, clientID, rm.Member,app)
+		}
+		
 		if rm.Content != "" {
 			rm.Content = buildMentions(rm.Content, rm.Mentions, clientID)
 			b.WriteString(discord.ParseMarkdown(rm.Content))
@@ -201,10 +218,10 @@ func buildReferencedMessage(b *strings.Builder, rm *astatine.Message, clientID s
 
 		b.WriteString("[::-]")
 		b.WriteByte('\n')
-	} /*else {
+	} else {
 		b.WriteString(" ╭ [::d]Original message deleted[::-]")
 		b.writeByte('\n')
-	}*/
+	}
 }
 
 func buildContent(b *strings.Builder, m *astatine.Message, clientID string) {
