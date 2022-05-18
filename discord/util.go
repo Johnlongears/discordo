@@ -7,6 +7,8 @@ import (
 	"github.com/ayntgl/astatine"
 )
 
+missingMembers := make(map[string]bool)
+
 func ChannelToString(c *astatine.Channel) string {
 	var repr string
 	if c.Name != "" {
@@ -48,15 +50,19 @@ func HasPermission(s *astatine.State, cID string, p int64) bool {
 func GetMember(session *astatine.Session, gID string, uID string) *astatine.Member {
 	member,_ := session.State.Member(gID,uID)
 	if(member == nil){
+		if(missingMembers[gID+":"+uID] == true){
+			return nil
+		}
 		member,_ = session.GuildMember(gID,uID)
 		if(member == nil){
-			user, _ := session.User(uID) //if user is nil here, something's gone horribly wrong
-			newmem := &astatine.Member{GuildID:gID, JoinedAt: time.Time{}, User:user}
-			session.State.MemberAdd(newmem)
+			missingMembers[gID+":"+uID] = true
 			return nil
 		}
 		session.State.MemberAdd(member)
 		return member
+	}
+	if(missingMembers[gID+":"+uID] == true){
+		delete(missingMembers,gID+":"+uID)
 	}
 	return member
 }
