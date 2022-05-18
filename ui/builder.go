@@ -7,6 +7,7 @@ import (
 
 	"github.com/ayntgl/astatine"
 	"github.com/ayntgl/discordo/discord"
+	"github.com/rivo/tview"
 )
 
 func buildEdit(app *App, e *astatine.MessageUpdate) []byte {
@@ -27,7 +28,7 @@ func buildEdit(app *App, e *astatine.MessageUpdate) []byte {
 			b.WriteString("[::-]")
 			b.WriteByte(' ')
 		}
-	b.WriteString("[[]EDIT]")
+	b.WriteString(tview.Escape("[EDIT]"))
 	if(e.BeforeUpdate == nil){
 		// Build the author of this message.
 		if m.Member == nil {
