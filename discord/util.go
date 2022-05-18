@@ -2,7 +2,6 @@ package discord
 
 import (
 	"strings"
-	"time"
 	
 	"github.com/ayntgl/astatine"
 )
