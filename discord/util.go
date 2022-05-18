@@ -46,12 +46,12 @@ func HasPermission(s *astatine.State, cID string, p int64) bool {
 }
 
 func GetMember(session *astatine.Session, gID string, uID string) *astatine.Member {
+	fmt.println(gID)
+	fmt.println(uID)
 	var member *astatine.Member
 	member,err := session.State.Member(gID,uID)
-	if err != nil {fmt.Println(err)}
 	if(member == nil){
 		member,err = session.GuildMember(gID,uID)
-		if err != nil {fmt.Println(err)}
 		if(member == nil){
 			return nil
 		}
@@ -64,10 +64,8 @@ func GetMember(session *astatine.Session, gID string, uID string) *astatine.Memb
 func GetChannel(session *astatine.Session, cID string) *astatine.Channel {
 	var channel *astatine.Channel
 	channel,err := session.State.Channel(cID)
-	if err != nil {fmt.Println(err)}
 	if(channel == nil){
 		channel,err = session.Channel(cID)
-		if err != nil {fmt.Println(err)}
 		if(channel == nil){
 			return nil
 		}
@@ -80,10 +78,8 @@ func GetChannel(session *astatine.Session, cID string) *astatine.Channel {
 func GetGuild(session *astatine.Session, gID string) *astatine.Guild {
 	var guild *astatine.Guild
 	guild,err := session.State.Guild(gID)
-	if err != nil {fmt.Println(err)}
 	if(guild == nil){
 		guild,err = session.Guild(gID)
-		if err != nil {fmt.Println(err)}
 		if(guild == nil){
 			return nil
 		}
