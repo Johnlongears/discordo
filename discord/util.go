@@ -46,8 +46,6 @@ func HasPermission(s *astatine.State, cID string, p int64) bool {
 }
 
 func GetMember(session *astatine.Session, gID string, uID string) *astatine.Member {
-	fmt.Println(gID)
-	fmt.Println(uID)
 	member,_ := session.State.Member(gID,uID)
 	if(member == nil){
 		member,_ = session.GuildMember(gID,uID)
