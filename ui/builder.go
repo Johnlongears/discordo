@@ -195,13 +195,13 @@ func buildReferencedMessage(b *strings.Builder, rm *astatine.Message, clientID s
 		b.WriteString(" ╭ ")
 		b.WriteString("[::d]")
 		if rm.Member == nil {
-			if len(m.GuildID) > 0 {
+			if len(rm.GuildID) > 0 {
 				member := discord.GetMember(app.Session,rm.GuildID,rm.Author.ID)
 				buildAuthor(b, rm.Author, clientID, member,app)
 			} else{
 				c := app.SelectedChannel
 				if c != nil && len(c.GuildID) > 0 {
-					member := discord.GetMember(app.Session,c.GuildID,m.Author.ID)
+					member := discord.GetMember(app.Session,c.GuildID,rm.Author.ID)
 					buildAuthor(b, rm.Author, clientID, member,app)
 				} else {
 					buildAuthor(b, rm.Author, clientID, nil,app)	//dm channel, probably.
