@@ -55,7 +55,7 @@ func GetMember(session *astatine.Session, gID string, uID string) *astatine.Memb
 			session.State.MemberAdd(newmem)
 			return nil
 		}
-		session.State.MemberAdd(member)
+		session.State.MemberAdd(*member)
 		return member
 	}
 	return member
