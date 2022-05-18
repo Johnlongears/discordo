@@ -35,9 +35,9 @@ func buildEdit(app *App, e *astatine.MessageUpdate) []byte {
 				member := discord.GetMember(app.Session,m.GuildID,m.Author.ID)
 				buildAuthor(&b, m.Author, app.Session.State.User.ID, member,app)
 			} else{
-				c := discord.GetChannel(app.Session,m.ChannelID)
+				c := app.SelectedChannel
 				if c != nil &&  len(c.GuildID) > 0 {
-					member := discord.GetMember(app.Session,m.GuildID,m.Author.ID)
+					member := discord.GetMember(app.Session,c.GuildID,m.Author.ID)
 					buildAuthor(&b, m.Author, app.Session.State.User.ID, member,app)
 				} else {
 					buildAuthor(&b, m.Author, app.Session.State.User.ID, nil,app)	//dm channel, probably.
@@ -130,10 +130,9 @@ func buildMessage(app *App, m *astatine.Message) []byte {
 				buildAuthor(&b, m.Author, app.Session.State.User.ID, member,app)
 			} else{
 				b.WriteString("no-gid")
-				c := discord.GetChannel(app.Session,m.ChannelID)
-				if c != nil &&  len(c.GuildID) > 0 {
-					b.WriteString(" fndgid")
-					member := discord.GetMember(app.Session,m.GuildID,m.Author.ID)
+				c := app.SelectedChannel
+				if c != nil && len(c.GuildID) > 0 {
+					member := discord.GetMember(app.Session,c.GuildID,m.Author.ID)
 					buildAuthor(&b, m.Author, app.Session.State.User.ID, member,app)
 				} else {
 					buildAuthor(&b, m.Author, app.Session.State.User.ID, nil,app)	//dm channel, probably.
