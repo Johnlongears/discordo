@@ -3,7 +3,9 @@ package discord
 import (
 	//"fmt"
 	"strings"
-
+	"encoding/json"
+	"time"
+	
 	"github.com/ayntgl/astatine"
 )
 
@@ -50,6 +52,9 @@ func GetMember(session *astatine.Session, gID string, uID string) *astatine.Memb
 	if(member == nil){
 		member,_ = session.GuildMember(gID,uID)
 		if(member == nil){
+			user, _ := session.User(uID) //if user is nil here, something's gone horribly wrong
+			newmem = astatine.Member{GuildID:gID, JoinedAt: time.Time{}, User:user}
+			session.State.MemberAdd(member)
 			return nil
 		}
 		session.State.MemberAdd(member)
