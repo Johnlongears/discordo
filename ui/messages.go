@@ -183,7 +183,7 @@ func (mtv *MessagesTextView) onInputCapture(e *tcell.EventKey) *tcell.EventKey {
 
 		// If the message contains attachments, add the appropriate actions to the actions list.
 		if len(m.Attachments) != 0 {
-			actionsList.AddItem("Download Attachment", "", "d", func() {
+			actionsList.AddItem("Download Attachment", "", 'd', func() {
 				go mtv.downloadAttachment(m.Attachments)
 				mtv.app.SetRoot(mtv.app.MainFlex, true)
 			})
