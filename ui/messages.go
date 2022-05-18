@@ -116,7 +116,31 @@ func (mtv *MessagesTextView) onInputCapture(e *tcell.EventKey) *tcell.EventKey {
 		actionsList.SetTitleAlign(tview.AlignLeft)
 		actionsList.SetBorder(true)
 		actionsList.SetBorderPadding(0, 0, 1, 1)
-
+		
+		if discord.HasPermission(mtv.app.Session.State, mtv.app.SelectedChannel.ID, astatine.PermissionManageMessages){
+			actionsList.AddItem("Delete","",'d',func(){
+				mtv.app.Session.ChannelMessageDelete(mtv.app.SelectedChannel.ID,hs[0])
+				mtv.app.
+					SetRoot(mtv.app.MainFlex, true).
+					SetFocus(mtv.app.MessageInputField)
+			})
+		}
+		if(m.Author.ID == mtv.app.Session.State.User.ID){
+			actionsList.AddItem("Delete","",'d',func(){
+				mtv.app.Session.ChannelMessageDelete(mtv.app.SelectedChannel.ID,hs[0])
+				mtv.app.
+					SetRoot(mtv.app.MainFlex, true).
+					SetFocus(mtv.app.MessageInputField)
+			})
+			actionsList.AddItem("Edit","",'e',func(){
+				mtv.app.MessageInputField.SetTitle("[E] Editing...")
+				mtv.app.MessageInputField.SetText(m.Content)
+				mtv.app.
+					SetRoot(mtv.app.MainFlex, true).
+					SetFocus(mtv.app.MessageInputField)
+			})		
+		}
+		
 		// If the client user has `SEND_MESSAGES` permission, add the appropriate actions to the list.
 		if discord.HasPermission(mtv.app.Session.State, mtv.app.SelectedChannel.ID, astatine.PermissionSendMessages) {
 			actionsList.AddItem("Reply", "", 'r', func() {
@@ -159,7 +183,7 @@ func (mtv *MessagesTextView) onInputCapture(e *tcell.EventKey) *tcell.EventKey {
 
 		// If the message contains attachments, add the appropriate actions to the actions list.
 		if len(m.Attachments) != 0 {
-			actionsList.AddItem("Download Attachment", "", 'd', func() {
+			actionsList.AddItem("Download Attachment", "", '', func() {
 				go mtv.downloadAttachment(m.Attachments)
 				mtv.app.SetRoot(mtv.app.MainFlex, true)
 			})
