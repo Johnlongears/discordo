@@ -2,6 +2,7 @@ package discord
 
 import (
 	"strings"
+	"time"
 	
 	"github.com/ayntgl/astatine"
 )
@@ -35,6 +36,21 @@ func FindMessageByID(ms []*astatine.Message, mID string) (int, *astatine.Message
 	}
 
 	return -1, nil
+}
+
+func FindLatestMessageFrom(ms []*astatine.Message, uID string) (int, *astatine.Message){
+	var latestSoFar time.Time
+	var m *astatine.Message
+	var finalIndex int
+	
+	for i,im := range ms {
+		if(im.Timestamp.After(latestSoFar)){
+			latestSoFar = im.Timestamp
+			m = *im
+			finalIndex = i
+		}
+	}
+	return finalIndex,m
 }
 
 func HasPermission(s *astatine.State, cID string, p int64) bool {
