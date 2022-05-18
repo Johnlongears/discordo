@@ -220,7 +220,7 @@ func buildReferencedMessage(b *strings.Builder, rm *astatine.Message, clientID s
 		b.WriteByte('\n')
 	} else {
 		b.WriteString(" ╭ [::d]Original message deleted[::-]")
-		b.writeByte('\n')
+		b.WriteByte('\n')
 	}
 }
 
