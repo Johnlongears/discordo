@@ -48,7 +48,6 @@ func HasPermission(s *astatine.State, cID string, p int64) bool {
 func GetMember(session *astatine.Session, gID string, uID string) *astatine.Member {
 	fmt.Println(gID)
 	fmt.Println(uID)
-	var member *astatine.Member
 	member,_ := session.State.Member(gID,uID)
 	if(member == nil){
 		member,_ = session.GuildMember(gID,uID)
@@ -62,7 +61,6 @@ func GetMember(session *astatine.Session, gID string, uID string) *astatine.Memb
 }
 
 func GetChannel(session *astatine.Session, cID string) *astatine.Channel {
-	var channel *astatine.Channel
 	channel,_ := session.State.Channel(cID)
 	if(channel == nil){
 		channel,_ = session.Channel(cID)
@@ -76,7 +74,6 @@ func GetChannel(session *astatine.Session, cID string) *astatine.Channel {
 }
 
 func GetGuild(session *astatine.Session, gID string) *astatine.Guild {
-	var guild *astatine.Guild
 	guild,_ := session.State.Guild(gID)
 	if(guild == nil){
 		guild,_ = session.Guild(gID)
