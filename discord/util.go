@@ -7,7 +7,7 @@ import (
 	"github.com/ayntgl/astatine"
 )
 
-missingMembers := make(map[string]bool)
+var missingMembers = make(map[string]bool)
 
 func ChannelToString(c *astatine.Channel) string {
 	var repr string
