@@ -31,6 +31,15 @@ func NewApp(token string, c *config.Config) *App {
 		SelectedMessage: -1,
 	}
 	app.Session.State.MaxMessageCount = 5000;
+	app.Session.State.TrackMembers = true;
+	app.Session.State.TrackChannels = true;
+	app.Session.State.TrackThreads = true;
+	app.Session.State.TrackEmojis = true;
+	app.Session.State.TrackMembers = true;
+	app.Session.State.TrackThreadMembers = true;
+	app.Session.State.TrackRoles = true;
+	app.Session.State.TrackVoice = true;
+	app.Session.State.TrackPresences = true;
 
 	app.GuildsList = NewGuildsList(app)
 	app.ChannelsTreeView = NewChannelsTreeView(app)
