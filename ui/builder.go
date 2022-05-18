@@ -125,11 +125,14 @@ func buildMessage(app *App, m *astatine.Message) []byte {
 		// Build the author of this message.
 		if m.Member == nil {
 			if len(m.GuildID) > 0 {
+				b.WriteString("yesgid")
 				member := discord.GetMember(app.Session,m.GuildID,m.Author.ID)
 				buildAuthor(&b, m.Author, app.Session.State.User.ID, member,app)
 			} else{
+				b.WriteString("no-gid")
 				c := discord.GetChannel(app.Session,m.ChannelID)
 				if c != nil &&  len(c.GuildID) > 0 {
+					b.WriteString(" fndgid")
 					member := discord.GetMember(app.Session,m.GuildID,m.Author.ID)
 					buildAuthor(&b, m.Author, app.Session.State.User.ID, member,app)
 				} else {
