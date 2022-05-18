@@ -46,7 +46,7 @@ func FindLatestMessageFrom(ms []*astatine.Message, uID string) (int, *astatine.M
 	for i,im := range ms {
 		if(im.Timestamp.After(latestSoFar)){
 			latestSoFar = im.Timestamp
-			m = *im
+			m = im
 			finalIndex = i
 		}
 	}
