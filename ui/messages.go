@@ -118,7 +118,7 @@ func (mtv *MessagesTextView) onInputCapture(e *tcell.EventKey) *tcell.EventKey {
 		actionsList.SetBorderPadding(0, 0, 1, 1)
 		
 		if discord.HasPermission(mtv.app.Session.State, mtv.app.SelectedChannel.ID, astatine.PermissionManageMessages){
-			actionsList.AddItem("Delete","",'d',func(){
+			actionsList.AddItem("Delete","",'D',func(){
 				mtv.app.Session.ChannelMessageDelete(mtv.app.SelectedChannel.ID,hs[0])
 				mtv.app.
 					SetRoot(mtv.app.MainFlex, true).
@@ -126,7 +126,7 @@ func (mtv *MessagesTextView) onInputCapture(e *tcell.EventKey) *tcell.EventKey {
 			})
 		}
 		if(m.Author.ID == mtv.app.Session.State.User.ID){
-			actionsList.AddItem("Delete","",'d',func(){
+			actionsList.AddItem("Delete","",'D',func(){
 				mtv.app.Session.ChannelMessageDelete(mtv.app.SelectedChannel.ID,hs[0])
 				mtv.app.
 					SetRoot(mtv.app.MainFlex, true).
@@ -183,7 +183,7 @@ func (mtv *MessagesTextView) onInputCapture(e *tcell.EventKey) *tcell.EventKey {
 
 		// If the message contains attachments, add the appropriate actions to the actions list.
 		if len(m.Attachments) != 0 {
-			actionsList.AddItem("Download Attachment", "", nil, func() {
+			actionsList.AddItem("Download Attachment", "", "d", func() {
 				go mtv.downloadAttachment(m.Attachments)
 				mtv.app.SetRoot(mtv.app.MainFlex, true)
 			})
