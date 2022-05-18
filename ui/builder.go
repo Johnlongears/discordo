@@ -27,7 +27,7 @@ func buildEdit(app *App, e *astatine.MessageUpdate) []byte {
 			b.WriteString("[::-]")
 			b.WriteByte(' ')
 		}
-	b.WriteString("[EDIT]")
+	b.WriteString("[[]EDIT]")
 	if(e.BeforeUpdate == nil){
 		// Build the author of this message.
 		if m.Member == nil {
