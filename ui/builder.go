@@ -28,7 +28,7 @@ func buildEdit(app *App, e *astatine.MessageUpdate) []byte {
 			b.WriteString("[::-]")
 			b.WriteByte(' ')
 		}
-	b.WriteString(tview.Escape("[EDIT]"))
+	b.WriteString(tview.Escape("[EDIT] "))
 	if(e.BeforeUpdate == nil){
 		// Build the author of this message.
 		if m.Member == nil {
