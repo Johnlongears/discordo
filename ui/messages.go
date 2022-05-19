@@ -17,8 +17,6 @@ import (
 	"github.com/rivo/tview"
 	"github.com/skratchdot/open-golang/open"
 	"github.com/rainu/go-command-chain"
-	
-	"golang.org/x/exp/slices"
 )
 
 var linkRegex = regexp.MustCompile("https?://.+")
@@ -317,9 +315,9 @@ func (mi *MessageInputField) onInputCapture(e *tcell.EventKey) *tcell.EventKey {
 				d := &astatine.MessageEdit{
 					ID:	 m.ID,
 					Channel: m.ChannelID,
-					Content: t,
+					Content: *t,
 				}
-				go mi.app.Session.ChannelMessageEditComplex(m.ChannelID, d)
+				go mi.app.Session.ChannelMessageEditComplex(d)
 			} else {
 				d := &astatine.MessageSend{
 					Content:         t,
@@ -349,13 +347,14 @@ func (mi *MessageInputField) onInputCapture(e *tcell.EventKey) *tcell.EventKey {
 						Join("echo", m.Content).
 						Join("sed", "-Ere",t).
 						Finalize().WithOutput(output).Run()
-					
-					d := &astatine.MessageEdit{
-						ID:	 m.ID,
-						Channel: m.ChannelID,
-						Content: output.String(),	
+					if(err == nil){
+						d := &astatine.MessageEdit{
+							ID:	 m.ID,
+							Channel: m.ChannelID,
+							Content: *output.String(),	
+						}
+						mi.app.Session.ChannelMessageEditComplex(d)		
 					}
-					mi.app.Session.ChannelMessageEditComplex(m.ChannelID, d)
 				}()
 			} else {
 				go mi.app.Session.ChannelMessageSend(mi.app.SelectedChannel.ID, t)
