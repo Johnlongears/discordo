@@ -119,14 +119,6 @@ func (mtv *MessagesTextView) onInputCapture(e *tcell.EventKey) *tcell.EventKey {
 		actionsList.SetBorder(true)
 		actionsList.SetBorderPadding(0, 0, 1, 1)
 		
-		if discord.HasPermission(mtv.app.Session.State, mtv.app.SelectedChannel.ID, astatine.PermissionManageMessages){
-			actionsList.AddItem("Delete","",'D',func(){
-				mtv.app.Session.ChannelMessageDelete(mtv.app.SelectedChannel.ID,hs[0])
-				mtv.app.
-					SetRoot(mtv.app.MainFlex, true).
-					SetFocus(mtv.app.MessageInputField)
-			})
-		}
 		if(m.Author.ID == mtv.app.Session.State.User.ID){
 			actionsList.AddItem("Delete","",'D',func(){
 				mtv.app.Session.ChannelMessageDelete(mtv.app.SelectedChannel.ID,hs[0])
@@ -141,6 +133,13 @@ func (mtv *MessagesTextView) onInputCapture(e *tcell.EventKey) *tcell.EventKey {
 					SetRoot(mtv.app.MainFlex, true).
 					SetFocus(mtv.app.MessageInputField)
 			})		
+		} else if discord.HasPermission(mtv.app.Session.State, mtv.app.SelectedChannel.ID, astatine.PermissionManageMessages){
+			actionsList.AddItem("Delete","",'D',func(){
+				mtv.app.Session.ChannelMessageDelete(mtv.app.SelectedChannel.ID,hs[0])
+				mtv.app.
+					SetRoot(mtv.app.MainFlex, true).
+					SetFocus(mtv.app.MessageInputField)
+			})
 		}
 		
 		// If the client user has `SEND_MESSAGES` permission, add the appropriate actions to the list.
