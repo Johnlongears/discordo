@@ -315,9 +315,9 @@ func (mi *MessageInputField) onInputCapture(e *tcell.EventKey) *tcell.EventKey {
 			_, m := discord.FindMessageByID(mi.app.SelectedChannel.Messages, mi.app.MessagesTextView.GetHighlights()[0])
 			if strings.HasPrefix(mi.app.MessageInputField.GetTitle(), "[E]"){
 				d := &astatine.MessageEdit{
-					ID:	 m.ID
-					Channel: m.ChannelID
-					Content: t	
+					ID:	 m.ID,
+					Channel: m.ChannelID,
+					Content: t,
 				}
 				go mi.app.Session.ChannelMessageEditComplex(m.ChannelID, d)
 			} else {
@@ -341,7 +341,7 @@ func (mi *MessageInputField) onInputCapture(e *tcell.EventKey) *tcell.EventKey {
 			mi.app.MessageInputField.SetTitle("")
 		} else {
 			if strings.HasPrefix(t,"s/") {
-				go func(){
+				go func() {
 					output := &bytes.Buffer{}
 					_,m := discord.FindLatestMessageFrom(mi.app.SelectedChannel.Messages,mi.app.Session.State.User.ID)
 					
@@ -351,9 +351,9 @@ func (mi *MessageInputField) onInputCapture(e *tcell.EventKey) *tcell.EventKey {
 						Finalize().WithOutput(output).Run()
 					
 					d := &astatine.MessageEdit{
-						ID:	 m.ID
-						Channel: m.ChannelID
-						Content: output.String()	
+						ID:	 m.ID,
+						Channel: m.ChannelID,
+						Content: output.String(),	
 					}
 					mi.app.Session.ChannelMessageEditComplex(m.ChannelID, d)
 				}()
