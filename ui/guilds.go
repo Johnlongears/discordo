@@ -78,7 +78,7 @@ func (gl *GuildsList) onSelected(idx int, mainText string, secondaryText string,
 					if nestedChannel.ParentID == c.ID {
 						channelTreeNode := tview.NewTreeNode(c.Name).
 							SetReference(c.ID)
-						rootTreeNode.AddChild(channelTreeNode
+						rootTreeNode.AddChild(channelTreeNode)
 						visibleNestedChannels += 1
 						continue CATEGORY
 					}
