@@ -2,7 +2,7 @@ package ui
 
 import (
 	"github.com/ayntgl/astatine"
-	"github.com/ayntgl/discordo/discord"
+	"github.com/craftxbox/discordo/discord"
 	"github.com/rivo/tview"
 )
 

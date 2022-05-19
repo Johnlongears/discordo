@@ -12,7 +12,7 @@ import (
 
 	"github.com/atotto/clipboard"
 	"github.com/ayntgl/astatine"
-	"github.com/ayntgl/discordo/discord"
+	"github.com/craftxbox/discordo/discord"
 	"github.com/gdamore/tcell/v2"
 	"github.com/rainu/go-command-chain"
 	"github.com/rivo/tview"

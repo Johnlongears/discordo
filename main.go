@@ -3,8 +3,8 @@ package main
 import (
 	"os"
 
-	"github.com/ayntgl/discordo/config"
-	"github.com/ayntgl/discordo/ui"
+	"github.com/craftxbox/discordo/config"
+	"github.com/craftxbox/discordo/ui"
 	"github.com/gdamore/tcell/v2"
 	"github.com/rivo/tview"
 	"github.com/urfave/cli/v2"

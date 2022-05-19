@@ -1,4 +1,4 @@
-module github.com/ayntgl/discordo
+module github.com/craftxbox/discordo
 
 go 1.18
 

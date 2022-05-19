@@ -5,7 +5,7 @@ import (
 	"strings"
 
 	"github.com/ayntgl/astatine"
-	"github.com/ayntgl/discordo/config"
+	"github.com/craftxbox/discordo/config"
 	"github.com/gdamore/tcell/v2"
 	"github.com/rivo/tview"
 )
