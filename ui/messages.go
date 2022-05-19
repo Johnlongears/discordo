@@ -348,10 +348,11 @@ func (mi *MessageInputField) onInputCapture(e *tcell.EventKey) *tcell.EventKey {
 						Join("sed", "-Ere",t).
 						Finalize().WithOutput(output).Run()
 					if(err == nil){
+						c := output.String()
 						d := &astatine.MessageEdit{
 							ID:	 m.ID,
 							Channel: m.ChannelID,
-							Content: &output.String(),	
+							Content: &c,	
 						}
 						mi.app.Session.ChannelMessageEditComplex(d)		
 					}
