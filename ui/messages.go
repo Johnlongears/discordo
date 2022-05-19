@@ -315,7 +315,7 @@ func (mi *MessageInputField) onInputCapture(e *tcell.EventKey) *tcell.EventKey {
 				d := &astatine.MessageEdit{
 					ID:	 m.ID,
 					Channel: m.ChannelID,
-					Content: *t,
+					Content: &t,
 				}
 				go mi.app.Session.ChannelMessageEditComplex(d)
 			} else {
@@ -351,7 +351,7 @@ func (mi *MessageInputField) onInputCapture(e *tcell.EventKey) *tcell.EventKey {
 						d := &astatine.MessageEdit{
 							ID:	 m.ID,
 							Channel: m.ChannelID,
-							Content: *output.String(),	
+							Content: &output.String(),	
 						}
 						mi.app.Session.ChannelMessageEditComplex(d)		
 					}
