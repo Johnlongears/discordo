@@ -318,18 +318,38 @@ func (mi *MessageInputField) onInputCapture(e *tcell.EventKey) *tcell.EventKey {
 				}
 				go mi.app.Session.ChannelMessageEditComplex(d)
 			} else {
-				d := &astatine.MessageSend{
-					Content:         t,
-					Reference:       m.Reference(),
-					AllowedMentions: &astatine.MessageAllowedMentions{RepliedUser: false},
-				}
-				if strings.HasPrefix(mi.app.MessageInputField.GetTitle(), "[@]") {
-					d.AllowedMentions.RepliedUser = true
-				} else {
-					d.AllowedMentions.RepliedUser = false
-				}
+				if m.Author.ID == mi.app.Session.State.User.ID && strings.HasPrefix(t,"s/") {
+					go func() {
+						output := &bytes.Buffer{}
 
-				go mi.app.Session.ChannelMessageSendComplex(m.ChannelID, d)
+						err := cmdchain.Builder().
+							Join("echo", m.Content).
+							Join("sed", "-Ere",t).
+							Finalize().WithOutput(output).Run()
+						if(err == nil){
+							c := output.String()
+							d := &astatine.MessageEdit{
+								ID:	 m.ID,
+								Channel: m.ChannelID,
+								Content: &c,	
+							}
+							mi.app.Session.ChannelMessageEditComplex(d)		
+						}
+					}()
+				} else {
+					d := &astatine.MessageSend{
+						Content:         t,
+						Reference:       m.Reference(),
+						AllowedMentions: &astatine.MessageAllowedMentions{RepliedUser: false},
+					}
+					if strings.HasPrefix(mi.app.MessageInputField.GetTitle(), "[@]") {
+						d.AllowedMentions.RepliedUser = true
+					} else {
+						d.AllowedMentions.RepliedUser = false
+					}
+
+					go mi.app.Session.ChannelMessageSendComplex(m.ChannelID, d)
+				}
 			}
 			
 			mi.app.SelectedMessage = -1
