@@ -1,6 +1,10 @@
 name: Autoformat
 
-on: [push, pull_request]
+on: 
+  pull_request:
+    branches:
+    - main
+  push:
 
 jobs:
   prettier:
@@ -16,6 +20,6 @@ jobs:
         fetch-depth: 0
 
     - name: Format code
-      uses: iamnotaturtle/auto-gofmt@v1.0
+      uses: iamnotaturtle/auto-gofmt@v2.0.0
       with:
         commit_message: "Autoformatting Code"
