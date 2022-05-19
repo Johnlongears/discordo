@@ -324,7 +324,7 @@ func (mi *MessageInputField) onInputCapture(e *tcell.EventKey) *tcell.EventKey {
 
 						err := cmdchain.Builder().
 							Join("echo", m.Content).
-							Join("sed", "-Ere", t).
+							Join("sed", "-Ee", t).
 							Finalize().WithOutput(output).Run()
 						if err == nil {
 							c := output.String()
@@ -364,7 +364,7 @@ func (mi *MessageInputField) onInputCapture(e *tcell.EventKey) *tcell.EventKey {
 
 					err := cmdchain.Builder().
 						Join("echo", m.Content).
-						Join("sed", "-Ere", t).
+						Join("sed", "-Ee", t).
 						Finalize().WithOutput(output).Run()
 					if err == nil {
 						c := output.String()
