@@ -20,12 +20,14 @@ require (
 	github.com/gdamore/encoding v1.0.0 // indirect
 	github.com/godbus/dbus/v5 v5.1.0 // indirect
 	github.com/gorilla/websocket v1.5.0 // indirect
-	github.com/lucasb-eyer/go-colorful v1.2.0 // indirect
-	github.com/mattn/go-runewidth v0.0.13 // indirect
-	github.com/rivo/uniseg v0.2.0 // indirect
-	github.com/russross/blackfriday/v2 v2.1.0 // indirect
-	golang.org/x/crypto v0.0.0-20220321153916-2c7772ba3064 // indirect
-	golang.org/x/sys v0.0.0-20220319134239-a9b59b0215f8 // indirect
-	golang.org/x/term v0.0.0-20210927222741-03fcf44c2211 // indirect
-	golang.org/x/text v0.3.7 // indirect
+        github.com/lucasb-eyer/go-colorful v1.2.0 // indirect
+        github.com/mattn/go-runewidth v0.0.13 // indirect
+        github.com/rainu/go-command-chain v0.1.0 // indirect
+        github.com/rivo/uniseg v0.2.0 // indirect
+        github.com/russross/blackfriday/v2 v2.1.0 // indirect
+        golang.org/x/crypto v0.0.0-20220321153916-2c7772ba3064 // indirect
+        golang.org/x/exp v0.0.0-20220518171630-0b5c67f07fdf // indirect
+        golang.org/x/sys v0.0.0-20220319134239-a9b59b0215f8 // indirect
+        golang.org/x/term v0.0.0-20210927222741-03fcf44c2211 // indirect
+        golang.org/x/text v0.3.7 // indirect
 )
