@@ -8,6 +8,7 @@ import (
 	"path/filepath"
 	"regexp"
 	"strings"
+	"bytes"
 
 	"github.com/atotto/clipboard"
 	"github.com/ayntgl/astatine"
@@ -15,6 +16,9 @@ import (
 	"github.com/gdamore/tcell/v2"
 	"github.com/rivo/tview"
 	"github.com/skratchdot/open-golang/open"
+	"github.com/rainu/go-command-chain"
+	
+	"golang.org/x/exp/slices"
 )
 
 var linkRegex = regexp.MustCompile("https?://.+")
@@ -309,25 +313,53 @@ func (mi *MessageInputField) onInputCapture(e *tcell.EventKey) *tcell.EventKey {
 
 		if len(mi.app.MessagesTextView.GetHighlights()) != 0 {
 			_, m := discord.FindMessageByID(mi.app.SelectedChannel.Messages, mi.app.MessagesTextView.GetHighlights()[0])
-			d := &astatine.MessageSend{
-				Content:         t,
-				Reference:       m.Reference(),
-				AllowedMentions: &astatine.MessageAllowedMentions{RepliedUser: false},
-			}
-			if strings.HasPrefix(mi.app.MessageInputField.GetTitle(), "[@]") {
-				d.AllowedMentions.RepliedUser = true
+			if strings.HasPrefix(mi.app.MessageInputField.GetTitle(), "[E]"){
+				d := &astatine.MessageEdit{
+					ID:	 m.ID
+					Channel: m.ChannelID
+					Content: t	
+				}
+				go mi.app.Session.ChannelMessageEditComplex(m.ChannelID, d)
 			} else {
-				d.AllowedMentions.RepliedUser = false
+				d := &astatine.MessageSend{
+					Content:         t,
+					Reference:       m.Reference(),
+					AllowedMentions: &astatine.MessageAllowedMentions{RepliedUser: false},
+				}
+				if strings.HasPrefix(mi.app.MessageInputField.GetTitle(), "[@]") {
+					d.AllowedMentions.RepliedUser = true
+				} else {
+					d.AllowedMentions.RepliedUser = false
+				}
+
+				go mi.app.Session.ChannelMessageSendComplex(m.ChannelID, d)
 			}
-
-			go mi.app.Session.ChannelMessageSendComplex(m.ChannelID, d)
-
+			
 			mi.app.SelectedMessage = -1
 			mi.app.MessagesTextView.Highlight()
 
 			mi.app.MessageInputField.SetTitle("")
 		} else {
-			go mi.app.Session.ChannelMessageSend(mi.app.SelectedChannel.ID, t)
+			if strings.HasPrefix(t,"s/") {
+				go func(){
+					output := &bytes.Buffer{}
+					_,m := discord.FindLatestMessageFrom(mi.app.SelectedChannel.Messages,mi.app.Session.State.User.ID)
+					
+					err := cmdchain.Builder().
+						Join("echo", m.Content).
+						Join("sed", "-Ere",t).
+						Finalize().WithOutput(output).Run()
+					
+					d := &astatine.MessageEdit{
+						ID:	 m.ID
+						Channel: m.ChannelID
+						Content: output.String()	
+					}
+					mi.app.Session.ChannelMessageEditComplex(m.ChannelID, d)
+				}()
+			} else {
+				go mi.app.Session.ChannelMessageSend(mi.app.SelectedChannel.ID, t)
+			}
 		}
 
 		mi.app.MessageInputField.SetText("")
