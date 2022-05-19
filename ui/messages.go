@@ -1,6 +1,7 @@
 package ui
 
 import (
+	"bytes"
 	"io/ioutil"
 	"net/http"
 	"os"
@@ -8,15 +9,14 @@ import (
 	"path/filepath"
 	"regexp"
 	"strings"
-	"bytes"
 
 	"github.com/atotto/clipboard"
 	"github.com/ayntgl/astatine"
 	"github.com/ayntgl/discordo/discord"
 	"github.com/gdamore/tcell/v2"
+	"github.com/rainu/go-command-chain"
 	"github.com/rivo/tview"
 	"github.com/skratchdot/open-golang/open"
-	"github.com/rainu/go-command-chain"
 )
 
 var linkRegex = regexp.MustCompile("https?://.+")
@@ -118,30 +118,30 @@ func (mtv *MessagesTextView) onInputCapture(e *tcell.EventKey) *tcell.EventKey {
 		actionsList.SetTitleAlign(tview.AlignLeft)
 		actionsList.SetBorder(true)
 		actionsList.SetBorderPadding(0, 0, 1, 1)
-		
-		if(m.Author.ID == mtv.app.Session.State.User.ID){
-			actionsList.AddItem("Delete","",'D',func(){
-				mtv.app.Session.ChannelMessageDelete(mtv.app.SelectedChannel.ID,hs[0])
+
+		if m.Author.ID == mtv.app.Session.State.User.ID {
+			actionsList.AddItem("Delete", "", 'D', func() {
+				mtv.app.Session.ChannelMessageDelete(mtv.app.SelectedChannel.ID, hs[0])
 				mtv.app.
 					SetRoot(mtv.app.MainFlex, true).
 					SetFocus(mtv.app.MessageInputField)
 			})
-			actionsList.AddItem("Edit","",'e',func(){
+			actionsList.AddItem("Edit", "", 'e', func() {
 				mtv.app.MessageInputField.SetTitle("[E] Editing...")
 				mtv.app.MessageInputField.SetText(m.Content)
 				mtv.app.
 					SetRoot(mtv.app.MainFlex, true).
 					SetFocus(mtv.app.MessageInputField)
-			})		
-		} else if discord.HasPermission(mtv.app.Session.State, mtv.app.SelectedChannel.ID, astatine.PermissionManageMessages){
-			actionsList.AddItem("Delete","",'D',func(){
-				mtv.app.Session.ChannelMessageDelete(mtv.app.SelectedChannel.ID,hs[0])
+			})
+		} else if discord.HasPermission(mtv.app.Session.State, mtv.app.SelectedChannel.ID, astatine.PermissionManageMessages) {
+			actionsList.AddItem("Delete", "", 'D', func() {
+				mtv.app.Session.ChannelMessageDelete(mtv.app.SelectedChannel.ID, hs[0])
 				mtv.app.
 					SetRoot(mtv.app.MainFlex, true).
 					SetFocus(mtv.app.MessageInputField)
 			})
 		}
-		
+
 		// If the client user has `SEND_MESSAGES` permission, add the appropriate actions to the list.
 		if discord.HasPermission(mtv.app.Session.State, mtv.app.SelectedChannel.ID, astatine.PermissionSendMessages) {
 			actionsList.AddItem("Reply", "", 'r', func() {
@@ -310,30 +310,30 @@ func (mi *MessageInputField) onInputCapture(e *tcell.EventKey) *tcell.EventKey {
 
 		if len(mi.app.MessagesTextView.GetHighlights()) != 0 {
 			_, m := discord.FindMessageByID(mi.app.SelectedChannel.Messages, mi.app.MessagesTextView.GetHighlights()[0])
-			if strings.HasPrefix(mi.app.MessageInputField.GetTitle(), "[E]"){
+			if strings.HasPrefix(mi.app.MessageInputField.GetTitle(), "[E]") {
 				d := &astatine.MessageEdit{
-					ID:	 m.ID,
+					ID:      m.ID,
 					Channel: m.ChannelID,
 					Content: &t,
 				}
 				go mi.app.Session.ChannelMessageEditComplex(d)
 			} else {
-				if m.Author.ID == mi.app.Session.State.User.ID && strings.HasPrefix(t,"s/") {
+				if m.Author.ID == mi.app.Session.State.User.ID && strings.HasPrefix(t, "s/") {
 					go func() {
 						output := &bytes.Buffer{}
 
 						err := cmdchain.Builder().
 							Join("echo", m.Content).
-							Join("sed", "-Ere",t).
+							Join("sed", "-Ere", t).
 							Finalize().WithOutput(output).Run()
-						if(err == nil){
+						if err == nil {
 							c := output.String()
 							d := &astatine.MessageEdit{
-								ID:	 m.ID,
+								ID:      m.ID,
 								Channel: m.ChannelID,
-								Content: &c,	
+								Content: &c,
 							}
-							mi.app.Session.ChannelMessageEditComplex(d)		
+							mi.app.Session.ChannelMessageEditComplex(d)
 						}
 					}()
 				} else {
@@ -351,29 +351,29 @@ func (mi *MessageInputField) onInputCapture(e *tcell.EventKey) *tcell.EventKey {
 					go mi.app.Session.ChannelMessageSendComplex(m.ChannelID, d)
 				}
 			}
-			
+
 			mi.app.SelectedMessage = -1
 			mi.app.MessagesTextView.Highlight()
 
 			mi.app.MessageInputField.SetTitle("")
 		} else {
-			if strings.HasPrefix(t,"s/") {
+			if strings.HasPrefix(t, "s/") {
 				go func() {
 					output := &bytes.Buffer{}
-					_,m := discord.FindLatestMessageFrom(mi.app.SelectedChannel.Messages,mi.app.Session.State.User.ID)
-					
+					_, m := discord.FindLatestMessageFrom(mi.app.SelectedChannel.Messages, mi.app.Session.State.User.ID)
+
 					err := cmdchain.Builder().
 						Join("echo", m.Content).
-						Join("sed", "-Ere",t).
+						Join("sed", "-Ere", t).
 						Finalize().WithOutput(output).Run()
-					if(err == nil){
+					if err == nil {
 						c := output.String()
 						d := &astatine.MessageEdit{
-							ID:	 m.ID,
+							ID:      m.ID,
 							Channel: m.ChannelID,
-							Content: &c,	
+							Content: &c,
 						}
-						mi.app.Session.ChannelMessageEditComplex(d)		
+						mi.app.Session.ChannelMessageEditComplex(d)
 					}
 				}()
 			} else {

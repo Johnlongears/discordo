@@ -57,9 +57,9 @@ func (gl *GuildsList) onSelected(idx int, mainText string, secondaryText string,
 
 		for _, c := range cs {
 			if discord.HasPermission(gl.app.Session.State, c.ID, astatine.PermissionViewChannel) == false {
-				continue	
+				continue
 			}
-			
+
 			if (c.Type == astatine.ChannelTypeGuildText || c.Type == astatine.ChannelTypeGuildNews) && (c.ParentID == "") {
 				channelTreeNode := tview.NewTreeNode(discord.ChannelToString(c)).
 					SetReference(c.ID)
@@ -73,7 +73,7 @@ func (gl *GuildsList) onSelected(idx int, mainText string, secondaryText string,
 				var visibleNestedChannels int
 				for _, nestedChannel := range cs {
 					if discord.HasPermission(gl.app.Session.State, nestedChannel.ID, astatine.PermissionViewChannel) == false {
-						continue	
+						continue
 					}
 					if nestedChannel.ParentID == c.ID {
 						channelTreeNode := tview.NewTreeNode(c.Name).
@@ -83,7 +83,7 @@ func (gl *GuildsList) onSelected(idx int, mainText string, secondaryText string,
 						continue CATEGORY
 					}
 				}
-				
+
 				if visibleNestedChannels > 0 {
 					channelTreeNode := tview.NewTreeNode(c.Name).
 						SetReference(c.ID)
@@ -95,7 +95,7 @@ func (gl *GuildsList) onSelected(idx int, mainText string, secondaryText string,
 		for _, c := range cs {
 			if (c.Type == astatine.ChannelTypeGuildText || c.Type == astatine.ChannelTypeGuildNews) && (c.ParentID != "") {
 				if discord.HasPermission(gl.app.Session.State, c.ID, astatine.PermissionViewChannel) == false {
-					continue	
+					continue
 				}
 				var parentTreeNode *tview.TreeNode
 				rootTreeNode.Walk(func(node, _ *tview.TreeNode) bool {

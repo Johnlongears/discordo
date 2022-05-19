@@ -3,7 +3,7 @@ package discord
 import (
 	"strings"
 	"time"
-	
+
 	"github.com/ayntgl/astatine"
 )
 
@@ -38,19 +38,19 @@ func FindMessageByID(ms []*astatine.Message, mID string) (int, *astatine.Message
 	return -1, nil
 }
 
-func FindLatestMessageFrom(ms []*astatine.Message, uID string) (int, *astatine.Message){
+func FindLatestMessageFrom(ms []*astatine.Message, uID string) (int, *astatine.Message) {
 	var latestSoFar time.Time
 	var m *astatine.Message
 	var finalIndex int
-	
-	for i,im := range ms {
-		if(im.Timestamp.After(latestSoFar)){
+
+	for i, im := range ms {
+		if im.Timestamp.After(latestSoFar) {
 			latestSoFar = im.Timestamp
 			m = im
 			finalIndex = i
 		}
 	}
-	return finalIndex,m
+	return finalIndex, m
 }
 
 func HasPermission(s *astatine.State, cID string, p int64) bool {
@@ -63,30 +63,30 @@ func HasPermission(s *astatine.State, cID string, p int64) bool {
 }
 
 func GetMember(session *astatine.Session, gID string, uID string) *astatine.Member {
-	member,_ := session.State.Member(gID,uID)
-	if(member == nil){
-		if(missingMembers[gID+":"+uID] == true){
+	member, _ := session.State.Member(gID, uID)
+	if member == nil {
+		if missingMembers[gID+":"+uID] == true {
 			return nil
 		}
-		member,_ = session.GuildMember(gID,uID)
-		if(member == nil){
+		member, _ = session.GuildMember(gID, uID)
+		if member == nil {
 			missingMembers[gID+":"+uID] = true
 			return nil
 		}
 		session.State.MemberAdd(member)
 		return member
 	}
-	if(missingMembers[gID+":"+uID] == true){
-		delete(missingMembers,gID+":"+uID)
+	if missingMembers[gID+":"+uID] == true {
+		delete(missingMembers, gID+":"+uID)
 	}
 	return member
 }
 
 func GetChannel(session *astatine.Session, cID string) *astatine.Channel {
-	channel,_ := session.State.Channel(cID)
-	if(channel == nil){
-		channel,_ = session.Channel(cID)
-		if(channel == nil){
+	channel, _ := session.State.Channel(cID)
+	if channel == nil {
+		channel, _ = session.Channel(cID)
+		if channel == nil {
 			return nil
 		}
 		session.State.ChannelAdd(channel)
@@ -96,10 +96,10 @@ func GetChannel(session *astatine.Session, cID string) *astatine.Channel {
 }
 
 func GetGuild(session *astatine.Session, gID string) *astatine.Guild {
-	guild,_ := session.State.Guild(gID)
-	if(guild == nil){
-		guild,_ = session.Guild(gID)
-		if(guild == nil){
+	guild, _ := session.State.Guild(gID)
+	if guild == nil {
+		guild, _ = session.Guild(gID)
+		if guild == nil {
 			return nil
 		}
 		session.State.GuildAdd(guild)

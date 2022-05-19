@@ -13,56 +13,56 @@ import (
 func buildEdit(app *App, e *astatine.MessageUpdate) []byte {
 	var b strings.Builder
 	// Define a new region and assign message ID as the region ID.
-		// Learn more:
-		// https://pkg.go.dev/github.com/rivo/tview#hdr-Regions_and_Highlights
+	// Learn more:
+	// https://pkg.go.dev/github.com/rivo/tview#hdr-Regions_and_Highlights
 	m := e
-		b.WriteString("[\"")
-		b.WriteString(m.ID)
-		b.WriteString("\"]")
-		// Build the message associated with crosspost, channel follow add, pin, or a reply.
-		buildReferencedMessage(&b, e.BeforeUpdate, app.Session.State.User.ID, app)
+	b.WriteString("[\"")
+	b.WriteString(m.ID)
+	b.WriteString("\"]")
+	// Build the message associated with crosspost, channel follow add, pin, or a reply.
+	buildReferencedMessage(&b, e.BeforeUpdate, app.Session.State.User.ID, app)
 
-		if app.Config.General.Timestamps {
-			b.WriteString("[::d]")
-			b.WriteString(m.Timestamp.Format(time.Stamp))
-			b.WriteString("[::-]")
-			b.WriteByte(' ')
-		}
+	if app.Config.General.Timestamps {
+		b.WriteString("[::d]")
+		b.WriteString(m.Timestamp.Format(time.Stamp))
+		b.WriteString("[::-]")
+		b.WriteByte(' ')
+	}
 	b.WriteString(tview.Escape("[EDIT] "))
-	if(e.BeforeUpdate == nil){
+	if e.BeforeUpdate == nil {
 		// Build the author of this message.
 		if m.Member == nil {
 			if len(m.GuildID) > 0 {
-				member := discord.GetMember(app.Session,m.GuildID,m.Author.ID)
-				buildAuthor(&b, m.Author, app.Session.State.User.ID, member,app)
-			} else{
+				member := discord.GetMember(app.Session, m.GuildID, m.Author.ID)
+				buildAuthor(&b, m.Author, app.Session.State.User.ID, member, app)
+			} else {
 				c := app.SelectedChannel
-				if c != nil &&  len(c.GuildID) > 0 {
-					member := discord.GetMember(app.Session,c.GuildID,m.Author.ID)
-					buildAuthor(&b, m.Author, app.Session.State.User.ID, member,app)
+				if c != nil && len(c.GuildID) > 0 {
+					member := discord.GetMember(app.Session, c.GuildID, m.Author.ID)
+					buildAuthor(&b, m.Author, app.Session.State.User.ID, member, app)
 				} else {
-					buildAuthor(&b, m.Author, app.Session.State.User.ID, nil,app)	//dm channel, probably.
+					buildAuthor(&b, m.Author, app.Session.State.User.ID, nil, app) // dm channel, probably.
 				}
 			}
 		} else {
-			buildAuthor(&b, m.Author, app.Session.State.User.ID, m.Member,app)
+			buildAuthor(&b, m.Author, app.Session.State.User.ID, m.Member, app)
 		}
 	}
-			
-		// Build the contents of the message.
+
+	// Build the contents of the message.
 	buildContent(&b, m.Message, app.Session.State.User.ID)
 
-		// Build the embeds associated with the message.
-		buildEmbeds(&b, m.Embeds)
+	// Build the embeds associated with the message.
+	buildEmbeds(&b, m.Embeds)
 
-		// Build the message attachments (attached files to the message).
-		buildAttachments(&b, m.Attachments)
+	// Build the message attachments (attached files to the message).
+	buildAttachments(&b, m.Attachments)
 
-		// Tags with no region ID ([""]) do not start new regions. They can
-		// therefore be used to mark the end of a region.
-		b.WriteString("[\"\"]")
+	// Tags with no region ID ([""]) do not start new regions. They can
+	// therefore be used to mark the end of a region.
+	b.WriteString("[\"\"]")
 
-		b.WriteByte('\n')
+	b.WriteByte('\n')
 	if str := b.String(); str != "" {
 		b := make([]byte, len(str)+1)
 		copy(b, str)
@@ -75,7 +75,7 @@ func buildEdit(app *App, e *astatine.MessageUpdate) []byte {
 
 func buildDelete(app *App, d *astatine.MessageDelete) []byte {
 	var b strings.Builder
-	if(d.BeforeDelete != nil){
+	if d.BeforeDelete != nil {
 		m := d.BeforeDelete
 		b.WriteString("[\"")
 		b.WriteString(m.ID)
@@ -114,8 +114,8 @@ func buildMessage(app *App, m *astatine.Message) []byte {
 		b.WriteString(m.ID)
 		b.WriteString("\"]")
 		// Build the message associated with crosspost, channel follow add, pin, or a reply.
-		if(m.Type == astatine.MessageTypeReply){
-			buildReferencedMessage(&b, m.ReferencedMessage, app.Session.State.User.ID, app)			
+		if m.Type == astatine.MessageTypeReply {
+			buildReferencedMessage(&b, m.ReferencedMessage, app.Session.State.User.ID, app)
 		}
 
 		if app.Config.General.Timestamps {
@@ -128,21 +128,21 @@ func buildMessage(app *App, m *astatine.Message) []byte {
 		// Build the author of this message.
 		if m.Member == nil {
 			if len(m.GuildID) > 0 {
-				member := discord.GetMember(app.Session,m.GuildID,m.Author.ID)
-				buildAuthor(&b, m.Author, app.Session.State.User.ID, member,app)
-			} else{
+				member := discord.GetMember(app.Session, m.GuildID, m.Author.ID)
+				buildAuthor(&b, m.Author, app.Session.State.User.ID, member, app)
+			} else {
 				c := app.SelectedChannel
 				if c != nil && len(c.GuildID) > 0 {
-					member := discord.GetMember(app.Session,c.GuildID,m.Author.ID)
-					buildAuthor(&b, m.Author, app.Session.State.User.ID, member,app)
+					member := discord.GetMember(app.Session, c.GuildID, m.Author.ID)
+					buildAuthor(&b, m.Author, app.Session.State.User.ID, member, app)
 				} else {
-					buildAuthor(&b, m.Author, app.Session.State.User.ID, nil,app)	//dm channel, probably.
+					buildAuthor(&b, m.Author, app.Session.State.User.ID, nil, app) // dm channel, probably.
 				}
 			}
 		} else {
-			buildAuthor(&b, m.Author, app.Session.State.User.ID, m.Member,app)
+			buildAuthor(&b, m.Author, app.Session.State.User.ID, m.Member, app)
 		}
-			
+
 		// Build the contents of the message.
 		buildContent(&b, m, app.Session.State.User.ID)
 
@@ -197,21 +197,21 @@ func buildReferencedMessage(b *strings.Builder, rm *astatine.Message, clientID s
 		b.WriteString("[::d]")
 		if rm.Member == nil {
 			if len(rm.GuildID) > 0 {
-				member := discord.GetMember(app.Session,rm.GuildID,rm.Author.ID)
-				buildAuthor(b, rm.Author, clientID, member,app)
-			} else{
+				member := discord.GetMember(app.Session, rm.GuildID, rm.Author.ID)
+				buildAuthor(b, rm.Author, clientID, member, app)
+			} else {
 				c := app.SelectedChannel
 				if c != nil && len(c.GuildID) > 0 {
-					member := discord.GetMember(app.Session,c.GuildID,rm.Author.ID)
-					buildAuthor(b, rm.Author, clientID, member,app)
+					member := discord.GetMember(app.Session, c.GuildID, rm.Author.ID)
+					buildAuthor(b, rm.Author, clientID, member, app)
 				} else {
-					buildAuthor(b, rm.Author, clientID, nil,app)	//dm channel, probably.
+					buildAuthor(b, rm.Author, clientID, nil, app) // dm channel, probably.
 				}
 			}
 		} else {
-			buildAuthor(b, rm.Author, clientID, rm.Member,app)
+			buildAuthor(b, rm.Author, clientID, rm.Member, app)
 		}
-		
+
 		if rm.Content != "" {
 			rm.Content = buildMentions(rm.Content, rm.Mentions, clientID)
 			b.WriteString(discord.ParseMarkdown(rm.Content))
@@ -340,10 +340,10 @@ func buildAuthor(b *strings.Builder, u *astatine.User, clientID string, m *astat
 		b.WriteString("! ")
 	}
 	var gotRoleColor bool = false
-	if app != nil && m != nil && len(m.Roles) >= 1  {
+	if app != nil && m != nil && len(m.Roles) >= 1 {
 		//r, err := app.Session.State.Role(m.GuildID)
 		//if r != nil {
-			//TODO
+		//TODO
 		//}
 	}
 	if gotRoleColor == false {
@@ -353,11 +353,11 @@ func buildAuthor(b *strings.Builder, u *astatine.User, clientID string, m *astat
 			b.WriteString("[#ED4245]")
 		}
 	}
-		
+
 	if m != nil && len(m.Nick) > 0 {
-		b.WriteString(m.Nick)	
+		b.WriteString(m.Nick)
 	} else {
-		b.WriteString(u.Username)	
+		b.WriteString(u.Username)
 	}
 	b.WriteString("[-] ")
 	if m != nil && m.CommunicationDisabledUntil != nil && m.CommunicationDisabledUntil.After(time.Now()) {
