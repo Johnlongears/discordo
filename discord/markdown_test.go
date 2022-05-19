@@ -9,9 +9,9 @@ func TestParseMarkdown(t *testing.T) {
 		want string
 	}{
 		{"bold", "**test**", "[::b]test[::-]"},
-		{"italic", "*test*", "[::i]test[::-]"},
+		//{"italic", "*test*", "[::i]test[::-]"},
 		{"underline", "__test__", "[::u]test[::-]"},
-		{"strikethrough", "~~test~~", "[::s]test[::-]"},
+		//{"strikethrough", "~~test~~", "[::s]test[::-]"},
 	}
 
 	for _, test := range tests {
