@@ -1,6 +1,8 @@
-# Discordo &middot; [![ci](https://github.com/ayntgl/discordo/actions/workflows/ci.yml/badge.svg)](https://github.com/ayntgl/discordo/actions/workflows/ci.yml) [![Go Report Card](https://goreportcard.com/badge/github.com/ayntgl/discordo)](https://goreportcard.com/report/github.com/ayntgl/discordo) [![license](https://img.shields.io/github/license/ayntgl/discordo?logo=github)](https://github.com/ayntgl/discordo/blob/master/LICENSE)
+# Discordo &middot; [![ci](https://github.com/craftxbox/discordo/actions/workflows/ci.yml/badge.svg)](https://github.com/craftxbox/discordo/actions/workflows/ci.yml) [![Go Report Card](https://goreportcard.com/badge/github.com/craftxbox/discordo)](https://goreportcard.com/report/github.com/craftxbox/discordo) [![license](https://img.shields.io/github/license/craftxbox/discordo?logo=github)](https://github.com/craftxbox/discordo/blob/master/LICENSE)
 
 Discordo is a lightweight, secure, and feature-rich Discord terminal client. Heavily work-in-progress, expect breaking changes.
+
+Credit to [Ayntgl](https://github.com/ayngtl) for the original project.
 
 ![Preview](.github/preview.png)
 
@@ -27,21 +29,22 @@ Discordo is a lightweight, secure, and feature-rich Discord terminal client. Hea
   - 2-Factor authentication
   - Desktop notifications
   - Partial [Discord-flavored markdown](https://support.discord.com/hc/en-us/articles/210298617-Markdown-Text-101-Chat-Formatting-Bold-Italic-Underline-)
+  - Sed s/ command editing (only tested on linux, must have sed on your PATH)
 
 ## Installation
 
 ## Prebuilt binaries
 
-You can download and install a [prebuilt binary here](https://nightly.link/ayntgl/discordo/workflows/ci/main) for Windows, macOS, or Linux.
+You can download and install a [prebuilt binary here](https://nightly.link/craftxbox/discordo/workflows/ci/main) for Windows, macOS, or Linux.
 
 ### Package managers
 
-- [Arch Linux](https://aur.archlinux.org/packages/discordo-git/): `yay -S discordo-git` (thanks to [Alyxia Sother](https://github.com/lexisother) for maintaining the AUR package).
+~~- [Arch Linux](https://aur.archlinux.org/packages/discordo-git/): `yay -S discordo-git` (thanks to [Alyxia Sother](https://github.com/lexisother) for maintaining the AUR package).~~ Outdated, based on the original archived project.
 
 ### Building from source
 
 ```bash
-git clone https://github.com/ayntgl/discordo
+git clone https://github.com/craftxbox/discordo
 cd discordo
 make build
 
