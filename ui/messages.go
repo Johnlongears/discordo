@@ -307,7 +307,19 @@ func (mi *MessageInputField) onInputCapture(e *tcell.EventKey) *tcell.EventKey {
 		if t == "" {
 			return nil
 		}
+		
+		//I know the variable T already exists, but this is so people can use a space before their messages
+		//to bypass the command handler and send a message starting with /
+		if strings.HasPrefix(mi.app.MessageInputField.GetText(),"/") {
+			_, m := discord.FindMessageByID(mi.app.SelectedChannel.Messages, mi.app.MessagesTextView.GetHighlights()[0])
+			go Commands.HandleCommand(mi,t,m)
+			mi.app.SelectedMessage = -1
+			mi.app.MessagesTextView.Highlight()
 
+			mi.app.MessageInputField.SetTitle("")
+			return nil
+		}
+		
 		if len(mi.app.MessagesTextView.GetHighlights()) != 0 {
 			_, m := discord.FindMessageByID(mi.app.SelectedChannel.Messages, mi.app.MessagesTextView.GetHighlights()[0])
 			if strings.HasPrefix(mi.app.MessageInputField.GetTitle(), "[E]") {
