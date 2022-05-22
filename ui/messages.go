@@ -202,8 +202,16 @@ func (mtv *MessagesTextView) onInputCapture(e *tcell.EventKey) *tcell.EventKey {
 			mtv.app.SetRoot(mtv.app.MainFlex, true)
 			mtv.app.SetFocus(mtv.app.MessagesTextView)
 		})
-		actionsList.AddItem("Copy ID", "", 'i', func() {
+		actionsList.AddItem("Copy ID: "+m.ID, "", 'i', func() {
 			if err := clipboard.WriteAll(m.ID); err != nil {
+				return
+			}
+
+			mtv.app.SetRoot(mtv.app.MainFlex, true)
+			mtv.app.SetFocus(mtv.app.MessagesTextView)
+		})
+		actionsList.AddItem("User ID: "+m.Author.ID, "", 'u', func() {
+			if err := clipboard.WriteAll(m.Author.ID); err != nil {
 				return
 			}
 
