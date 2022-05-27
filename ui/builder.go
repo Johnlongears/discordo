@@ -340,13 +340,13 @@ func buildAuthor(b *strings.Builder, u *astatine.User, clientID string, m *astat
 		b.WriteString("! ")
 	}
 	var gotRoleColor bool = false
-	if app != nil && m != nil && len(m.Roles) >= 1 {
+	/*if app != nil && m != nil && len(m.Roles) >= 1 {
 		//r, err := app.Session.State.Role(m.GuildID)
 		//if r != nil {
 		//TODO
 		//}
-	}
-	if gotRoleColor == false {
+	}*/
+	if !gotRoleColor {
 		if u.ID == clientID {
 			b.WriteString("[#57F287]")
 		} else {
