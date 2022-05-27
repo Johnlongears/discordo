@@ -315,19 +315,19 @@ func (mi *MessageInputField) onInputCapture(e *tcell.EventKey) *tcell.EventKey {
 		if t == "" {
 			return nil
 		}
-		
-		//I know the variable T already exists, but this is so people can use a space before their messages
-		//to bypass the command handler and send a message starting with /
-		if strings.HasPrefix(mi.app.MessageInputField.GetText(),"/") {
-			var m *astatine.Message = nil;
+
+		// I know the variable T already exists, but this is so people can use a space before their messages
+		// to bypass the command handler and send a message starting with /
+		if strings.HasPrefix(mi.app.MessageInputField.GetText(), "/") {
+			var m *astatine.Message = nil
 			if len(mi.app.MessagesTextView.GetHighlights()) > 0 {
 				_, m = discord.FindMessageByID(mi.app.SelectedChannel.Messages, mi.app.MessagesTextView.GetHighlights()[0])
 			}
 			mi.SetTitle("Processing...")
-			HandleCommand(mi,t,m)
+			HandleCommand(mi, t, m)
 			return nil
 		}
-		
+
 		if len(mi.app.MessagesTextView.GetHighlights()) != 0 {
 			_, m := discord.FindMessageByID(mi.app.SelectedChannel.Messages, mi.app.MessagesTextView.GetHighlights()[0])
 			if strings.HasPrefix(mi.app.MessageInputField.GetTitle(), "[E]") {

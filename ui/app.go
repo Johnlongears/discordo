@@ -50,7 +50,7 @@ func NewApp(token string, c *config.Config) *App {
 	app.EnableMouse(app.Config.General.Mouse)
 	app.SetInputCapture(app.onInputCapture)
 
-	InitCommands();
+	InitCommands()
 
 	return app
 }

@@ -18,9 +18,9 @@ func HandleCommand(mi *MessageInputField, t string, m *astatine.Message) {
 	if cmd != nil {
 		cmd.Execute(mi, argv, argc, m)
 	}
-    mi.app.SelectedMessage = -1
-    mi.SetText("")
-    mi.SetTitle("")
+	mi.app.SelectedMessage = -1
+	mi.SetText("")
+	mi.SetTitle("")
 }
 
 var commands []Command
@@ -33,17 +33,17 @@ func InitCommands() {
 			Usage:       "%s [command name]",
 			Execute: func(mi *MessageInputField, argv []string, argc int, m *astatine.Message) {
 				if argc > 1 {
-                    var cmd *Command;
-                    if(strings.HasPrefix(argv[1], "/")) {
-                        cmd = commandMap[argv[1]]
-                    } else {
-                        cmd = commandMap["/" + argv[1]]
-                    }
-                    list := CreateList(mi.app.MessagesTextView)
-					list.AddItem("Name:",cmd.Names[0],0,nil)
-                    list.AddItem("Description:",cmd.Description,0,nil)
-                    list.AddItem("Usage:",fmt.Sprintf(cmd.Usage,cmd.Names[0]),0,nil)
-                    list.AddItem("Aliases:",strings.Join(cmd.Names[1:],", "),0,nil);
+					var cmd *Command
+					if strings.HasPrefix(argv[1], "/") {
+						cmd = commandMap[argv[1]]
+					} else {
+						cmd = commandMap["/"+argv[1]]
+					}
+					list := CreateList(mi.app.MessagesTextView)
+					list.AddItem("Name:", cmd.Names[0], 0, nil)
+					list.AddItem("Description:", cmd.Description, 0, nil)
+					list.AddItem("Usage:", fmt.Sprintf(cmd.Usage, cmd.Names[0]), 0, nil)
+					list.AddItem("Aliases:", strings.Join(cmd.Names[1:], ", "), 0, nil)
 					mi.app.SetRoot(list, true)
 				} else {
 					list := CreateList(mi.app.MessagesTextView)
