@@ -56,12 +56,18 @@ func InitCommands() {
 				} else {
 					list := CreateList(mi.app.MessagesTextView)
 					for _, cmd := range commands {
+						dcmd := cmd
 						list.AddItem(
 							cmd.Names[0]+" -> "+cmd.Description,
 							fmt.Sprintf(" ╰ Usage: "+cmd.Usage+
 								" | Aliases: "+strings.Join(cmd.Names[1:], ", "), cmd.Names[0]),
 							0,
-							nil)
+							func(){
+								mi.SetText(dcmd.Names[0] +" ")
+								mi.app.
+									SetRoot(mi.app.MainFlex, true).
+									SetFocus(mi)
+							})
 					}
 					mi.app.SetRoot(list, true)
 				}
