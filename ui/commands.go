@@ -17,12 +17,11 @@ func HandleCommand(mi *MessageInputField, t string, m *astatine.Message) bool {
 	cmd,found := commandMap[argv[0]]
 	if found {
 		cmd.Execute(mi, argv, argc, m)
-	}
-    mi.app.SelectedMessage = -1
+		mi.app.SelectedMessage = -1
 		if cmd.Terminating {
-    mi.SetText("")
+			mi.SetText("")
 		}
-    mi.SetTitle("")
+		mi.SetTitle("")
 		return cmd.Terminating
 	} else {
 		mi.app.MessagesTextView.Write([]byte("[[#FFFF00]SYSTEM[-]] Unknown command.\n"));
