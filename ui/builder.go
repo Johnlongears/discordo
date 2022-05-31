@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"strings"
 	"time"
+	"regexp"
 
 	"github.com/ayntgl/astatine"
 	"github.com/craftxbox/discordo/discord"
@@ -227,8 +228,10 @@ func buildReferencedMessage(b *strings.Builder, rm *astatine.Message, clientID s
 
 func buildContent(b *strings.Builder, m *astatine.Message, clientID string) {
 	if m.Content != "" {
-		m.Content = buildMentions(m.Content, m.Mentions, clientID)
-		b.WriteString(discord.ParseMarkdown(m.Content))
+		content := buildMentions(m.Content, m.Mentions, clientID)
+		re := regexp.MustCompile(`\n{3,}`)
+		content = re.ReplaceAllString(content, "\n\n")
+		b.WriteString(discord.ParseMarkdown(content))
 	}
 }
 
