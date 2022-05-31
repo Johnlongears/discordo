@@ -11,7 +11,7 @@ import (
 
 var commandMap = make(map[string]*Command)
 
-func HandleCommand(mi *MessageInputField, t string, m *astatine.Message) {
+func HandleCommand(mi *MessageInputField, t string, m *astatine.Message) bool {
 	argv, _ := shlex.Split(t)
 	argc := len(argv)
 	cmd,found := commandMap[argv[0]]
@@ -19,8 +19,11 @@ func HandleCommand(mi *MessageInputField, t string, m *astatine.Message) {
 		cmd.Execute(mi, argv, argc, m)
 	}
     mi.app.SelectedMessage = -1
+		if cmd.Terminating {
     mi.SetText("")
+		}
     mi.SetTitle("")
+		return cmd.Terminating
 	} else {
 		mi.app.MessagesTextView.Write([]byte("[[#FFFF00]SYSTEM[-]] Unknown command.\n"));
 		mi.SetTitle("");
@@ -63,6 +66,7 @@ func InitCommands() {
 					mi.app.SetRoot(list, true)
 				}
 			},
+			Terminating: true,
 		},
 	}
 	for _, cmd := range commands {
@@ -77,6 +81,7 @@ type Command struct {
 	Description string
 	Usage       string
 	Execute     func(mi *MessageInputField, argv []string, argc int, m *astatine.Message)
+	Terminating bool // If true the command will stop message sending, if false, it will send a message when done.
 }
 
 func CreateList(mtv *MessagesTextView) *tview.List {
