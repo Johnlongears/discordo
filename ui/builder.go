@@ -2,9 +2,9 @@ package ui
 
 import (
 	"fmt"
+	"regexp"
 	"strings"
 	"time"
-	"regexp"
 
 	"github.com/ayntgl/astatine"
 	"github.com/craftxbox/discordo/discord"
