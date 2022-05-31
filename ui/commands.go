@@ -14,13 +14,18 @@ var commandMap = make(map[string]*Command)
 func HandleCommand(mi *MessageInputField, t string, m *astatine.Message) {
 	argv, _ := shlex.Split(t)
 	argc := len(argv)
-	cmd := commandMap[argv[0]]
-	if cmd != nil {
+	cmd,found := commandMap[argv[0]]
+	if found {
 		cmd.Execute(mi, argv, argc, m)
 	}
     mi.app.SelectedMessage = -1
     mi.SetText("")
     mi.SetTitle("")
+	} else {
+		mi.app.MessagesTextView.Write([]byte("[[#FFFF00]SYSTEM[-]] Unknown command.\n"));
+		mi.SetTitle("");
+		return true;
+	}
 }
 
 var commands []Command
