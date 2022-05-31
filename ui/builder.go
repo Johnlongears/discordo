@@ -215,7 +215,14 @@ func buildReferencedMessage(b *strings.Builder, rm *astatine.Message, clientID s
 
 		if rm.Content != "" {
 			rm.Content = buildMentions(rm.Content, rm.Mentions, clientID)
-			b.WriteString(discord.ParseMarkdown(rm.Content))
+			var content string
+			if len(rm.Content) > 100 {
+				content = rm.Content[:100] + "..."
+			} else {
+				content = rm.Content
+			}
+			content = strings.ReplaceAll(content, "\n", " ")
+			b.WriteString(discord.ParseMarkdown(content))
 		}
 
 		b.WriteString("[::-]")
