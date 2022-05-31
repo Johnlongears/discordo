@@ -9,7 +9,7 @@ import (
 	"github.com/rivo/tview"
 )
 
-var commandMap = make(map[string]*Command)
+var commandMap = make(map[string]Command)
 
 func HandleCommand(mi *MessageInputField, t string, m *astatine.Message) bool {
 	argv, _ := shlex.Split(t)
@@ -41,8 +41,7 @@ func InitCommands() {
 			Usage:       "%s [command name]",
 			Execute: func(mi *MessageInputField, argv []string, argc int, m *astatine.Message) {
 				if argc > 1 {
-                    var cmd *Command;
-                    if(strings.HasPrefix(argv[1], "/")) {
+                    var cmd Command;
                         cmd = commandMap[argv[1]]
                     } else {
                         cmd = commandMap["/" + argv[1]]
@@ -77,7 +76,7 @@ func InitCommands() {
 	}
 	for _, cmd := range commands {
 		for _, name := range cmd.Names {
-			commandMap[name] = &cmd
+			commandMap[name] = cmd
 		}
 	}
 }
