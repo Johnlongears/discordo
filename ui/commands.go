@@ -89,7 +89,7 @@ func CreateList(mtv *MessagesTextView) *tview.List {
 	list.SetDoneFunc(func() {
 		mtv.app.
 			SetRoot(mtv.app.MainFlex, true).
-			SetFocus(mtv.app.MessagesTextView)
+			SetFocus(mtv.app.MessageInputField)
 	})
 	list.SetTitle("Press the Escape key to close")
 	list.SetTitleAlign(tview.AlignLeft)
