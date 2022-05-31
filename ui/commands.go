@@ -39,9 +39,10 @@ func InitCommands() {
 			Names:       []string{"/help", "/?"},
 			Description: "Display information about available commands",
 			Usage:       "%s [command name]",
-			Execute: func(mi *MessageInputField, argv []string, argc int, m *astatine.Message) {
+			Execute: func (mi *MessageInputField, argv []string, argc int, m *astatine.Message) {
 				if argc > 1 {
                     var cmd Command;
+                    if strings.HasPrefix(argv[1], "/") {
                         cmd = commandMap[argv[1]]
                     } else {
                         cmd = commandMap["/" + argv[1]]
