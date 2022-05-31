@@ -73,6 +73,23 @@ func InitCommands() {
 			},
 			Terminating: true,
 		},
+		{
+			Names:       []string{"/shrug","/shrugend"},
+			Description: "Send or prepend a ¯\\_(ツ)_/¯ to your message. Use /shrugend to append ¯\\_(ツ)_/¯ instead",
+			Usage:       "%s [message content]",
+			Execute: func(mi *MessageInputField, argv []string, argc int, m *astatine.Message) {
+				if argc > 1 {
+					if argv[0] == "/shrugend" {
+						mi.SetText(strings.Join(argv[1:], " ") + " ¯\\_(ツ)_/¯")
+					} else {
+						mi.SetText("¯\\_(ツ)_/¯ " + strings.Join(argv[1:], " "))
+					}
+				} else {
+					mi.SetText("¯\\_(ツ)_/¯")
+				}
+			},
+			Terminating: false,
+		},
 	}
 	for _, cmd := range commands {
 		for _, name := range cmd.Names {
