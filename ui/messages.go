@@ -324,8 +324,15 @@ func (mi *MessageInputField) onInputCapture(e *tcell.EventKey) *tcell.EventKey {
 				_, m = discord.FindMessageByID(mi.app.SelectedChannel.Messages, mi.app.MessagesTextView.GetHighlights()[0])
 			}
 			mi.SetTitle("Processing...")
-			HandleCommand(mi,t,m)
-			return nil
+			if HandleCommand(mi,t,m){
+				return nil
+			} else {
+				//recalcuate t because the text field has been modified by a non-terminating command
+				t = strings.TrimSpace(mi.app.MessageInputField.GetText())
+				if t == "" {
+					return nil
+				}
+			}
 		}
 		
 		if len(mi.app.MessagesTextView.GetHighlights()) != 0 {
