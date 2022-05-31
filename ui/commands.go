@@ -41,10 +41,15 @@ func InitCommands() {
 			Execute: func(mi *MessageInputField, argv []string, argc int, m *astatine.Message) {
 				if argc > 1 {
 					var cmd Command
+					var found bool
 					if strings.HasPrefix(argv[1], "/") {
-						cmd = commandMap[argv[1]]
+						cmd, found = commandMap[argv[1]]
 					} else {
-						cmd = commandMap["/"+argv[1]]
+						cmd, found = commandMap["/"+argv[1]]
+					}
+					if !found {
+						mi.app.MessagesTextView.Write([]byte("[[#FFFF00]Help[-]] Unknown command. Remove any arguments for a full list.\n"))
+						return
 					}
 					list := CreateList(mi.app.MessagesTextView)
 					list.AddItem("Name:", cmd.Names[0], 0, nil)
