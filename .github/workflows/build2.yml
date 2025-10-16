@@ -1,0 +1,33 @@
+name: Build Discordo
+
+# Allows you to manually trigger the workflow or run on pushes to main
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - main
+
+jobs:
+  build-macos:
+    runs-on: macos-latest
+    steps:
+      # Step 1: Checkout the repo
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      # Step 2: Set up Go
+      - name: Set up Go
+        uses: actions/setup-go@v4
+        with:
+          go-version: 1.21
+
+      # Step 3: Build the executable
+      - name: Build Discordo
+        run: go build -o discordo
+
+      # Step 4: Upload the built executable as an artifact
+      - name: Upload executable
+        uses: actions/upload-artifact@v3
+        with:
+          name: discordo-macos
+          path: discordo
